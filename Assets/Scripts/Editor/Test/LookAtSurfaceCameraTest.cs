@@ -23,7 +23,7 @@ namespace CamConTest
 
             var targetGO = new GameObject();
             target = targetGO.AddComponent<SphereCollider>();
-            target.radius = 1f;
+            target.radius = .25f;
         }
 
         [TearDown]
@@ -106,8 +106,32 @@ namespace CamConTest
             Assert.IsTrue(worldUp == testObj.transform.up);
         }
 
-        private void AssertCameraLookingAtTarget()
+        [Test]
+        public void TranslateLookTargetToRespectsChangingNormal()
         {
+            var origin = new Vector3(0, 10, 0);
+            var newTarget = new Vector3(10, 10, 10);
+            var normalAtOrigin = new Vector3(0, 1, 0);
+            var normalAtNewTarget = new Vector3(0, 0, 1);
+            var worldUp = new Vector3(0, 0, 1);
+            var height = 5f;
+            surface.GetOrigin().Returns(origin);
+            surface.GetNormalAtPoint(origin).Returns(normalAtOrigin);
+            surface.GetNormalAtPoint(newTarget).Returns(normalAtNewTarget);
+            surface.GetWorldUpVector().Returns(worldUp);
+
+            testObj.Start();
+            testObj.SetHeight(height);
+            testObj.TranslateLookTargetTo(newTarget);
+
+            Assert.AreEqual(newTarget + (normalAtNewTarget * height), testObj.transform.position);
+            Assert.IsTrue(-normalAtNewTarget == testObj.transform.forward);
+            //Assert.IsTrue(worldUp == testObj.transform.up);
+        }
+
+        private void AssertCameraLookingAt(Vector3 pos)
+        {
+            target.transform.position = pos;
             RaycastHit hitInfo;
             Assert.IsTrue(Physics.Raycast(testObj.transform.position, testObj.transform.forward, out hitInfo));
             Assert.AreEqual(target, hitInfo.collider);

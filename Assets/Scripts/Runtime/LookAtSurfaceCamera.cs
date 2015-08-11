@@ -9,7 +9,7 @@ namespace CamCon
 
         public Surface Surface { get; set; }
 
-        public void Start()
+        public virtual void Start()
         {
             lookTarget = Surface.GetOrigin();
             height = 0f;
@@ -17,19 +17,19 @@ namespace CamCon
             transform.forward = -Surface.GetNormalAtPoint(lookTarget);
         }
 
-        public void SetHeight(float height)
+        public virtual void SetHeight(float height)
         {
             this.height = height;
             UpdateTransform();
         }
 
-        public void TranslateLookTargetTo(Vector3 target)
+        public virtual void TranslateLookTargetTo(Vector3 target)
         {
             lookTarget = target;
             UpdateTransform();
         }
 
-        public void TranslateLookTargetWithHeight(Vector3 surfacePoint, float height)
+        public virtual void TranslateLookTargetWithHeight(Vector3 surfacePoint, float height)
         {
             lookTarget = surfacePoint;
             this.height = height;
@@ -40,6 +40,8 @@ namespace CamCon
         {
             var normal = Surface.GetNormalAtPoint(lookTarget);
             transform.position = lookTarget + (height * normal);
+            //transform.localRotation.SetLookRotation(lookTarget - transform.position, Surface.GetWorldUpVector());
+            transform.LookAt(lookTarget, Surface.GetWorldUpVector());
         }
     }
 }
