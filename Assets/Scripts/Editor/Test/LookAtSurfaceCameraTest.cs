@@ -42,73 +42,68 @@ namespace CamConTest
             var normalAtOrigin = new Vector3(0, 1, 0);
             var worldUp = new Vector3(0, 0, 1);
             surface.GetOrigin().Returns(origin);
-            surface.GetNormalAtPoint(origin).Returns(normalAtOrigin);
+            surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
             surface.GetWorldUpVector().Returns(worldUp);
 
             testObj.Start();
 
             Assert.AreEqual(origin, testObj.transform.position);
             Assert.IsTrue(-normalAtOrigin == testObj.transform.forward);
+            Assert.IsTrue(worldUp == testObj.transform.up);
         }
 
         [Test]
-        [Ignore("Probably not an interface we want to expose")]
-        public void RotateToLookAtCausesCameraToPointTowardTarget()
-        {
-            target.transform.position = new Vector3(10, 10, 0);
-            surface.GetWorldUpVector().Returns(Vector3.up);
-
-            testObj.RotateToLookAt(target.transform.position);
-
-            AssertCameraLookingAtTarget();
-        }
-
-        [Test]
-        [Ignore("Probably not behavior we need")]
-        public void TranslateToLookAtMaintainsOffsetBetweenCameraAndTarget()
-        {
-            target.transform.position = new Vector3(2, 0, 0);
-            testObj.RotateToLookAt(target.transform.position);
-            var difference = target.transform.position - testObj.transform.position;
-            Assert.AreEqual(new Vector3(2, 0, 0), difference);
-
-            target.transform.position = new Vector3(2, 0, 5);
-            testObj.TranslateToLookAt(target.transform.position);
-            Assert.AreEqual(difference, target.transform.position - testObj.transform.position);
-
-            AssertCameraLookingAtTarget();
-        }
-
-        [Test]
-        public void TranslateToLookAtMaintainsHeightAboveSurfaceAlongNormal()
-        {
-            var firstFaceNormal = new Vector3(1, 0, 0);
-            var secondFaceNormal = new Vector3(0, 0, 1);
-            var firstSurfacePoint = new Vector3(1, 0, 0);
-            var secondSurfacePoint = new Vector3(0, 0, 1);
-            surface.GetNormalAtPoint(firstSurfacePoint).Returns(firstFaceNormal);
-            surface.GetNormalAtPoint(secondSurfacePoint).Returns(secondFaceNormal);
-            surface.GetWorldUpVector().Returns(Vector3.up);
-
-            testObj.transform.position = new Vector3(2, 0, 0);
-            testObj.RotateToLookAt(new Vector3(0, 0, 0));
-            testObj.SetHeightAboveSurface(firstSurfacePoint, 1);
-            testObj.TranslateToLookAt(secondSurfacePoint);
-
-            Assert.AreEqual(new Vector3(0, 0, 2), testObj.transform.position);
-        }
-
-        [Test]
-        public void SetHeightAboveSurfaceMovesCameraAlongSurfaceNormal()
+        public void TranslateLookTargetWithHeightMovesCameraAlongSurfaceNormal()
         {
             var normal = new Vector3(0, 1, 0);
             var pos = new Vector3(10, 0, 10);
             var height = 2f;
-            surface.GetNormalAtPoint(pos).Returns(normal);
+            surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normal);
 
-            testObj.SetHeightAboveSurface(pos, height);
+            testObj.Start();
+            testObj.TranslateLookTargetWithHeight(pos, height);
 
-            Assert.AreEqual(new Vector3(10, 2, 10), testObj.transform.position);
+            Assert.AreEqual(pos + (normal * height), testObj.transform.position);
+        }
+
+        [Test]
+        public void SetHeightMovesCameraAlongSurfaceNormal()
+        {
+            var origin = new Vector3(0, 10, 0);
+            var normalAtOrigin = new Vector3(0, 1, 0);
+            var worldUp = new Vector3(0, 0, 1);
+            var height = 5f;
+            surface.GetOrigin().Returns(origin);
+            surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
+            surface.GetWorldUpVector().Returns(worldUp);
+
+            testObj.Start();
+            testObj.SetHeight(height);
+
+            Assert.AreEqual(origin + (normalAtOrigin * height), testObj.transform.position);
+            Assert.IsTrue(-normalAtOrigin == testObj.transform.forward);
+            Assert.IsTrue(worldUp == testObj.transform.up);
+        }
+
+        [Test]
+        public void TranslateLookTargetToMaintainsHeight()
+        {
+            var origin = new Vector3(0, 10, 0);
+            var newTarget = new Vector3(10, 10, 10);
+            var normal = new Vector3(0, 1, 0);
+            var worldUp = new Vector3(0, 0, 1);
+            var height = 5f;
+            surface.GetOrigin().Returns(origin);
+            surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normal);
+            surface.GetWorldUpVector().Returns(worldUp);
+
+            testObj.Start();
+            testObj.SetHeight(height);
+            testObj.TranslateLookTargetTo(newTarget);
+
+            Assert.AreEqual(newTarget + (normal * height), testObj.transform.position);
+            Assert.IsTrue(-normal == testObj.transform.forward);
+            Assert.IsTrue(worldUp == testObj.transform.up);
         }
 
         private void AssertCameraLookingAtTarget()

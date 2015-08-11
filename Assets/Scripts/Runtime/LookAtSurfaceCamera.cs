@@ -11,37 +11,35 @@ namespace CamCon
 
         public void Start()
         {
-            transform.position = Surface.GetOrigin();
-            transform.forward = -Surface.GetNormalAtPoint(transform.position);
-            //transform.LookAt(Surface.GetOrigin(), Surface.GetWorldUpVector());
+            lookTarget = Surface.GetOrigin();
+            height = 0f;
+            transform.position = lookTarget;
+            transform.forward = -Surface.GetNormalAtPoint(lookTarget);
         }
 
-        public void RotateToLookAt(Vector3 target)
+        public void SetHeight(float height)
         {
-            /*
+            this.height = height;
+            UpdateTransform();
+        }
+
+        public void TranslateLookTargetTo(Vector3 target)
+        {
             lookTarget = target;
-            transform.LookAt(target, Surface.GetWorldUpVector());
-            */
+            UpdateTransform();
         }
 
-        public void TranslateToLookAt(Vector3 target)
+        public void TranslateLookTargetWithHeight(Vector3 surfacePoint, float height)
         {
-            /*
-            var prevNormal = Surface.GetNormalAtPoint(lookTarget);
-
-            var offset = lookTarget - transform.position;
-            lookTarget = target;
-            transform.position = lookTarget - offset;
-            */
-
-            SetHeightAboveSurface(target, height);
+            lookTarget = surfacePoint;
+            this.height = height;
+            UpdateTransform();
         }
 
-        public void SetHeightAboveSurface(Vector3 surfacePoint, float height)
+        private void UpdateTransform()
         {
-            //this.height = height;
-            var normal = Surface.GetNormalAtPoint(surfacePoint);
-            transform.position = surfacePoint + (height * normal);
+            var normal = Surface.GetNormalAtPoint(lookTarget);
+            transform.position = lookTarget + (height * normal);
         }
     }
 }
