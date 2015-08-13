@@ -40,5 +40,15 @@ namespace CamConTest
             var pos = new Vector3((float)x, (float)y, (float)z);
             Assert.AreEqual(normal, testObj.GetNormalAtPoint(pos));
         }
+
+        [Test]
+        public void GetSurfaceHeightAtPointAlwaysReturnsZero(
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
+            [NUnit.Framework.Values(-10.0)] double y,
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
+        {
+            var pos = new Vector3((float)x, (float)y, (float)z);
+            Assert.AreEqual(0f, testObj.GetSurfaceHeightAtPoint(pos));
+        }
     }
 }

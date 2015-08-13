@@ -11,18 +11,10 @@ namespace CamCon
         public float horizontalSpeed = 50f;
 
         private LookAtSurfaceCamera cam;
-        private float currentHeight;
-        private Vector3 currentLook;
 
         private void Awake()
         {
             cam = GetComponent<LookAtSurfaceCamera>();
-        }
-
-        private void Start()
-        {
-            currentHeight = 0f;
-            currentLook = cameraSurface.GetOrigin();
         }
 
         private void Update()
@@ -43,30 +35,35 @@ namespace CamCon
 
         private void MoveUp()
         {
+            var currentHeight = cam.GetHeightAboveSurface();
             currentHeight += verticalSpeed * Time.deltaTime;
-            cam.SetHeight(currentHeight);
+            cam.SetHeightAboveSurface(currentHeight);
         }
 
         private void MoveDown()
         {
+            var currentHeight = cam.GetHeightAboveSurface();
             currentHeight -= verticalSpeed * Time.deltaTime;
-            cam.SetHeight(currentHeight);
+            cam.SetHeightAboveSurface(currentHeight);
         }
 
         private void MoveForward()
         {
+            var currentLook = cam.GetLookTarget();
             currentLook += cameraSurface.GetWorldUpVector() * horizontalSpeed * Time.deltaTime;
             cam.TranslateLookTargetTo(currentLook);
         }
 
         private void MoveBackward()
         {
+            var currentLook = cam.GetLookTarget();
             currentLook -= cameraSurface.GetWorldUpVector() * horizontalSpeed * Time.deltaTime;
             cam.TranslateLookTargetTo(currentLook);
         }
 
         private void MoveLeft()
         {
+            var currentLook = cam.GetLookTarget();
             var leftVector = Vector3.Cross(cameraSurface.GetWorldUpVector(), cameraSurface.GetNormalAtPoint(transform.position));
             currentLook += leftVector * horizontalSpeed * Time.deltaTime;
             cam.TranslateLookTargetTo(currentLook);
@@ -74,6 +71,7 @@ namespace CamCon
 
         private void MoveRight()
         {
+            var currentLook = cam.GetLookTarget();
             var leftVector = Vector3.Cross(cameraSurface.GetWorldUpVector(), cameraSurface.GetNormalAtPoint(transform.position));
             currentLook -= leftVector * horizontalSpeed * Time.deltaTime;
             cam.TranslateLookTargetTo(currentLook);

@@ -36,20 +36,24 @@ namespace CamConTest
         }
 
         [Test]
-        public void CameraStartsAboveSurfaceOriginLookingDownAtHeightZero()
+        public void CameraStartsAboveSurfaceAtOriginLookingDownAtHeightOne()
         {
             var origin = new Vector3(0, 10, 0);
             var normalAtOrigin = new Vector3(0, 1, 0);
             var worldUp = new Vector3(0, 0, 1);
+            var surfaceHeight = 5f;
             surface.GetOrigin().Returns(origin);
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
             surface.GetWorldUpVector().Returns(worldUp);
+            surface.GetSurfaceHeightAtPoint(Arg.Any<Vector3>()).Returns(surfaceHeight);
 
             testObj.Start();
 
-            Assert.AreEqual(origin, testObj.transform.position);
+            Assert.AreEqual(origin + (normalAtOrigin * (surfaceHeight + 1f)), testObj.transform.position);
             Assert.IsTrue(-normalAtOrigin == testObj.transform.forward);
             Assert.IsTrue(worldUp == testObj.transform.up);
+            Assert.AreEqual(origin + (normalAtOrigin * surfaceHeight), testObj.GetLookTarget());
+            Assert.AreEqual(1f, testObj.GetHeightAboveSurface());
         }
 
         [Test]
@@ -67,22 +71,25 @@ namespace CamConTest
         }
 
         [Test]
-        public void SetHeightMovesCameraAlongSurfaceNormal()
+        public void SetHeightAboveSurfaceMovesCameraAlongSurfaceNormal()
         {
             var origin = new Vector3(0, 10, 0);
             var normalAtOrigin = new Vector3(0, 1, 0);
             var worldUp = new Vector3(0, 0, 1);
+            var surfaceHeight = 7f;
             var height = 5f;
             surface.GetOrigin().Returns(origin);
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
             surface.GetWorldUpVector().Returns(worldUp);
+            surface.GetSurfaceHeightAtPoint(Arg.Any<Vector3>()).Returns(surfaceHeight);
 
             testObj.Start();
-            testObj.SetHeight(height);
+            testObj.SetHeightAboveSurface(height);
 
-            Assert.AreEqual(origin + (normalAtOrigin * height), testObj.transform.position);
+            Assert.AreEqual(origin + (normalAtOrigin * (height + surfaceHeight)), testObj.transform.position);
             Assert.IsTrue(-normalAtOrigin == testObj.transform.forward);
             Assert.IsTrue(worldUp == testObj.transform.up);
+            Assert.AreEqual(height, testObj.GetHeightAboveSurface());
         }
 
         [Test]
@@ -98,12 +105,13 @@ namespace CamConTest
             surface.GetWorldUpVector().Returns(worldUp);
 
             testObj.Start();
-            testObj.SetHeight(height);
+            testObj.SetHeightAboveSurface(height);
             testObj.TranslateLookTargetTo(newTarget);
 
             Assert.AreEqual(newTarget + (normal * height), testObj.transform.position);
             Assert.IsTrue(-normal == testObj.transform.forward);
             Assert.IsTrue(worldUp == testObj.transform.up);
+            Assert.AreEqual(newTarget, testObj.GetLookTarget());
         }
 
         [Test]
@@ -121,7 +129,7 @@ namespace CamConTest
             surface.GetWorldUpVector().Returns(worldUp);
 
             testObj.Start();
-            testObj.SetHeight(height);
+            testObj.SetHeightAboveSurface(height);
             testObj.TranslateLookTargetTo(newTarget);
 
             Assert.AreEqual(newTarget + (normalAtNewTarget * height), testObj.transform.position);

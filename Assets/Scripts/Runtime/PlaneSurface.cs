@@ -29,5 +29,10 @@ namespace CamCon
         {
             return normal;
         }
+
+        public float GetSurfaceHeightAtPoint(Vector3 position)
+        {
+            return 0f;
+        }
     }
 }

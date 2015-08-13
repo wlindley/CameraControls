@@ -4,6 +4,7 @@ namespace CamCon
 {
     public class LookAtSurfaceCamera : MonoBehaviour
     {
+        private const float InitialHeightAboveSurface = 1f;
         private Vector3 lookTarget;
         private float height;
 
@@ -11,13 +12,23 @@ namespace CamCon
 
         public virtual void Start()
         {
-            lookTarget = Surface.GetOrigin();
-            height = 0f;
-            transform.position = lookTarget;
-            transform.forward = -Surface.GetNormalAtPoint(lookTarget);
+            var origin = Surface.GetOrigin();
+            var normal = Surface.GetNormalAtPoint(origin);
+            var height = Surface.GetSurfaceHeightAtPoint(origin);
+            TranslateLookTargetWithHeight(origin + (normal * height), InitialHeightAboveSurface);
         }
 
-        public virtual void SetHeight(float height)
+        public virtual Vector3 GetLookTarget()
+        {
+            return lookTarget;
+        }
+
+        public virtual float GetHeightAboveSurface()
+        {
+            return height;
+        }
+
+        public virtual void SetHeightAboveSurface(float height)
         {
             this.height = height;
             UpdateTransform();
