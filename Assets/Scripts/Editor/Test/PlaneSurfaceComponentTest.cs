@@ -6,29 +6,21 @@ using CamCon;
 namespace CamConTest
 {
     [TestFixture]
-    public class ColliderPlaneSurfaceTest
+    public class PlaneSurfaceComponentTest
     {
-        private ColliderPlaneSurface testObj;
-        private BoxCollider collider;
+        private PlaneSurfaceComponent testObj;
         private Vector3 testObjPos;
-        private Vector3 boxSize;
-        private Vector3 boxCenter;
 
         [SetUp]
         public void SetUp()
         {
             testObjPos = new Vector3(50, 50, 50);
-            boxSize = new Vector3(100, 0, 100);
-            boxCenter = new Vector3(10, 0, 10);
 
             var testObjGO = new GameObject();
             testObjGO.transform.position = testObjPos;
 
-            collider = testObjGO.AddComponent<BoxCollider>();
-            collider.size = boxSize;
-            collider.center = boxCenter;
-
-            testObj = testObjGO.AddComponent<ColliderPlaneSurface>();
+            testObj = testObjGO.AddComponent<PlaneSurfaceComponent>();
+            testObj.renderSize = 500f;
 
             testObj.Awake();
         }
@@ -38,13 +30,12 @@ namespace CamConTest
         {
             GameObject.DestroyImmediate(testObj.gameObject);
             testObj = null;
-            collider = null;
         }
 
         [Test]
         public void GetOriginReturnsBoxPositionPlusCenter()
         {
-            Assert.AreEqual(testObjPos + boxCenter, testObj.GetOrigin());
+            Assert.AreEqual(testObjPos, testObj.GetOrigin());
         }
 
         [Test]

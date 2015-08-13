@@ -95,7 +95,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 425038665}
-  - 65: {fileID: 425038664}
   - 114: {fileID: 425038663}
   m_Layer: 0
   m_Name: PlaneSurface
@@ -115,18 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56835093ef71d71468f4d878e748dd7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &425038664
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 425038662}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 100, y: 0, z: 100}
-  m_Center: {x: 0, y: 0, z: 0}
+  renderSize: 100
 --- !u!4 &425038665
 Transform:
   m_ObjectHideFlags: 0

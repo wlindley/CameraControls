@@ -2,16 +2,14 @@
 
 namespace CamCon
 {
-    [RequireComponent(typeof(BoxCollider))]
-    public class ColliderPlaneSurface : SurfaceComponent
+    public class PlaneSurfaceComponent : SurfaceComponent
     {
-        private BoxCollider box;
+        public float renderSize = 100f;
         private PlaneSurface surface;
 
         public void Awake()
         {
-            box = GetComponent<BoxCollider>();
-            surface = new PlaneSurface(transform.position + box.center, transform.up, transform.forward);
+            surface = new PlaneSurface(transform.position, transform.up, transform.forward);
         }
 
         public override Vector3 GetOrigin()
@@ -32,6 +30,12 @@ namespace CamCon
         public override float GetSurfaceHeightAtPoint(Vector3 position)
         {
             return surface.GetSurfaceHeightAtPoint(position);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(transform.position, new Vector3(renderSize, 0f, renderSize));
         }
     }
 }
