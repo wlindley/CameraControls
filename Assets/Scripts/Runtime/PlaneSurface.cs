@@ -44,7 +44,7 @@ namespace CamCon
         virtual public Vector3 ClampPointToSurface(Vector3 position)
         {
             var delta = position - origin;
-            var distanceFromSurface = Vector3.Dot(position, normal);
+            var distanceFromSurface = Vector3.Dot(delta, normal);
             return position - (distanceFromSurface * normal);
         }
     }

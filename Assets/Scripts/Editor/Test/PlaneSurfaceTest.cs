@@ -71,7 +71,8 @@ namespace CamConTest
             testObj = new PlaneSurface(origin, normal, up);
             var pos = new Vector3((float)x, (float)y, (float)z);
 
-            var distanceFromSurface = Vector3.Dot(pos, normal.normalized);
+            var delta = pos - origin;
+            var distanceFromSurface = Vector3.Dot(delta, normal.normalized);
             var pointOnSurface = pos - (distanceFromSurface * normal.normalized);
 
             Assert.AreEqual(pointOnSurface, testObj.ClampPointToSurface(pos));
