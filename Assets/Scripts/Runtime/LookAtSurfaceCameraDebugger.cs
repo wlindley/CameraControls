@@ -35,16 +35,16 @@ namespace CamCon
 
         private void MoveUp()
         {
-            var currentHeight = cam.GetHeightAboveSurface();
+            var currentHeight = cam.GetDistanceToTarget();
             currentHeight += verticalSpeed * Time.deltaTime;
-            cam.SetHeightAboveSurface(currentHeight);
+            cam.SetDistanceToTarget(currentHeight);
         }
 
         private void MoveDown()
         {
-            var currentHeight = cam.GetHeightAboveSurface();
+            var currentHeight = cam.GetDistanceToTarget();
             currentHeight -= verticalSpeed * Time.deltaTime;
-            cam.SetHeightAboveSurface(currentHeight);
+            cam.SetDistanceToTarget(currentHeight);
         }
 
         private void MoveForward()

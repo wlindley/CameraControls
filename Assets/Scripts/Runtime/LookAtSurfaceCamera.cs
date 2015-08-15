@@ -5,15 +5,15 @@ namespace CamCon
 {
     public class LookAtSurfaceCamera : MonoBehaviour
     {
-        public const float InitialHeightAboveSurface = 1f;
+        public const float InitialDistanceToTarget = 1f;
         private Vector3 lookTarget;
-        private float height;
+        private float distanceToTarget;
 
         public Surface Surface { get; set; }
 
         public virtual void Start()
         {
-            TranslateLookTargetWithHeight(Surface.GetInitialPointOnSurface(), 1f);
+            TranslateLookTargetAndDistance(Surface.GetInitialPointOnSurface(), 1f);
         }
 
         public virtual Vector3 GetLookTarget()
@@ -21,14 +21,14 @@ namespace CamCon
             return lookTarget;
         }
 
-        public virtual float GetHeightAboveSurface()
+        public virtual float GetDistanceToTarget()
         {
-            return height;
+            return distanceToTarget;
         }
 
-        public virtual void SetHeightAboveSurface(float height)
+        public virtual void SetDistanceToTarget(float distance)
         {
-            this.height = height;
+            this.distanceToTarget = distance;
             UpdateTransform();
         }
 
@@ -38,17 +38,17 @@ namespace CamCon
             UpdateTransform();
         }
 
-        public virtual void TranslateLookTargetWithHeight(Vector3 surfacePoint, float height)
+        public virtual void TranslateLookTargetAndDistance(Vector3 surfacePoint, float distance)
         {
             lookTarget = surfacePoint;
-            this.height = height;
+            this.distanceToTarget = distance;
             UpdateTransform();
         }
 
         private void UpdateTransform()
         {
             var normal = Surface.GetNormalAtPoint(lookTarget);
-            transform.position = lookTarget + (height * normal);
+            transform.position = lookTarget + (distanceToTarget * normal);
             //transform.localRotation.SetLookRotation(lookTarget - transform.position, Surface.GetWorldUpVector());
             transform.LookAt(lookTarget, Surface.GetWorldUpVector());
         }
