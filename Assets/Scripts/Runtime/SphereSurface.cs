@@ -17,6 +17,8 @@ namespace CamCon
         private float radius;
         private Vector3 up;
 
+        public SphereSurface() : this(Vector3.zero, 1f, Vector3.up) { }
+
         public SphereSurface(Vector3 origin, float radius, Vector3 up)
         {
             this.origin = origin;
@@ -24,22 +26,22 @@ namespace CamCon
             this.up = up;
         }
 
-        public Vector3 GetInitialPointOnSurface()
+        virtual public Vector3 GetInitialPointOnSurface()
         {
             return origin + (radius * Vector3.forward);
         }
 
-        public Vector3 GetWorldUpVector()
+        virtual public Vector3 GetWorldUpVector()
         {
             return up;
         }
 
-        public Vector3 GetNormalAtPoint(Vector3 position)
+        virtual public Vector3 GetNormalAtPoint(Vector3 position)
         {
             return (position - origin).normalized;
         }
 
-        public Vector3 ClampPointToSurface(Vector3 position)
+        virtual public Vector3 ClampPointToSurface(Vector3 position)
         {
             return origin + (GetNormalAtPoint(position) * radius);
         }
