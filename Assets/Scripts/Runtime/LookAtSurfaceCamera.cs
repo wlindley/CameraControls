@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using System;
 
 namespace CamCon
 {
     public class LookAtSurfaceCamera : MonoBehaviour
     {
-        private const float InitialHeightAboveSurface = 1f;
+        public const float InitialHeightAboveSurface = 1f;
         private Vector3 lookTarget;
         private float height;
 
@@ -12,10 +13,7 @@ namespace CamCon
 
         public virtual void Start()
         {
-            var origin = Surface.GetOrigin();
-            var normal = Surface.GetNormalAtPoint(origin);
-            var height = Surface.GetSurfaceHeightAtPoint(origin);
-            TranslateLookTargetWithHeight(origin + (normal * height), InitialHeightAboveSurface);
+            TranslateLookTargetWithHeight(Surface.GetInitialPointOnSurface(), 1f);
         }
 
         public virtual Vector3 GetLookTarget()

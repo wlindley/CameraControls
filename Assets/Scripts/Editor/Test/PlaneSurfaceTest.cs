@@ -9,20 +9,23 @@ namespace CamConTest
     public class PlaneSurfaceTest
     {
         private PlaneSurface testObj;
-        private Vector3 origin = new Vector3(0, -10, 0);
-        private Vector3 normal = new Vector3(0, 0, 1);
-        private Vector3 up = new Vector3(0, 1, 0);
+        private Vector3 origin;
+        private Vector3 normal;
+        private Vector3 up;
 
         [SetUp]
         public void SetUp()
         {
+            origin = new Vector3(0, -10, 0);
+            normal = new Vector3(0, 0, 1);
+            up = new Vector3(0, 1, 0);
             testObj = new PlaneSurface(origin, normal, up);
         }
 
         [Test]
-        public void GetOriginReturnsSpecifiedOrigin()
+        public void GetInitialPointOnSurfaceReturnsSpecifiedOrigin()
         {
-            Assert.AreEqual(origin, testObj.GetOrigin());
+            Assert.AreEqual(origin, testObj.GetInitialPointOnSurface());
         }
 
         [Test]
@@ -32,7 +35,14 @@ namespace CamConTest
         }
 
         [Test]
-        public void GetNormalAtPointAlwaysReturnsSamePoint(
+        public void NormalIsUnitVector()
+        {
+            testObj = new PlaneSurface(origin, normal * 10f, up);
+            Assert.AreEqual(1f, testObj.GetNormalAtPoint(origin).magnitude);
+        }
+
+        [Test]
+        public void GetNormalAtPointAlwaysReturnsSameNormal(
             [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
             [NUnit.Framework.Values(-10.0)] double y,
             [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
@@ -42,13 +52,29 @@ namespace CamConTest
         }
 
         [Test]
-        public void GetSurfaceHeightAtPointAlwaysReturnsZero(
+        public void ClampPointToSurfaceForcesOffsetToOriginAlongNormal(
             [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
-            [NUnit.Framework.Values(-10.0)] double y,
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double y,
             [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
         {
             var pos = new Vector3((float)x, (float)y, (float)z);
-            Assert.AreEqual(0f, testObj.GetSurfaceHeightAtPoint(pos));
+            Assert.AreEqual(new Vector3((float)x, (float)y, origin.z), testObj.ClampPointToSurface(pos));
+        }
+
+        [Test]
+        public void ClampPointToSurfaceForcesOffsetToOriginAlongNormalWhenPlaneIsTilted(
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double y,
+            [NUnit.Framework.Values(0.0)] double z)
+        {
+            normal = new Vector3(.3f, .7f, 0f);
+            testObj = new PlaneSurface(origin, normal, up);
+            var pos = new Vector3((float)x, (float)y, (float)z);
+
+            var distanceFromSurface = Vector3.Dot(pos, normal.normalized);
+            var pointOnSurface = pos - (distanceFromSurface * normal.normalized);
+
+            Assert.AreEqual(pointOnSurface, testObj.ClampPointToSurface(pos));
         }
     }
 }

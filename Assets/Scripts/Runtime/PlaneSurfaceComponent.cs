@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 namespace CamCon
 {
@@ -9,12 +10,12 @@ namespace CamCon
 
         public void Awake()
         {
-            surface = new PlaneSurface(transform.position, transform.up, transform.forward);
+            surface = PlaneSurface.GetInstance(transform.position, transform.up, transform.forward);
         }
 
-        public override Vector3 GetOrigin()
+        public override Vector3 GetInitialPointOnSurface()
         {
-            return surface.GetOrigin();
+            return surface.GetInitialPointOnSurface();
         }
 
         public override Vector3 GetWorldUpVector()
@@ -27,9 +28,9 @@ namespace CamCon
             return surface.GetNormalAtPoint(position);
         }
 
-        public override float GetSurfaceHeightAtPoint(Vector3 position)
+        public override Vector3 ClampPointToSurface(Vector3 position)
         {
-            return surface.GetSurfaceHeightAtPoint(position);
+            return surface.ClampPointToSurface(position);
         }
 
         private void OnDrawGizmosSelected()

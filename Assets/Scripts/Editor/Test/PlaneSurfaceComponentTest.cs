@@ -9,18 +9,21 @@ namespace CamConTest
     public class PlaneSurfaceComponentTest
     {
         private PlaneSurfaceComponent testObj;
+        private PlaneSurface surface;
         private Vector3 testObjPos;
 
         [SetUp]
         public void SetUp()
         {
+            surface = Substitute.For<PlaneSurface>();
+            PlaneSurface.TestInstance = surface;
+
             testObjPos = new Vector3(50, 50, 50);
 
             var testObjGO = new GameObject();
             testObjGO.transform.position = testObjPos;
 
             testObj = testObjGO.AddComponent<PlaneSurfaceComponent>();
-            testObj.renderSize = 500f;
 
             testObj.Awake();
         }
@@ -30,38 +33,43 @@ namespace CamConTest
         {
             GameObject.DestroyImmediate(testObj.gameObject);
             testObj = null;
+            PlaneSurface.TestInstance = null;
+        }
+
+        private Vector3 GetRandomPoint()
+        {
+            return new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
         }
 
         [Test]
-        public void GetOriginReturnsBoxPositionPlusCenter()
+        public void GetInitialPointOnSurfacePassesThroughToWrappedInstance()
         {
-            Assert.AreEqual(testObjPos, testObj.GetOrigin());
+            surface.GetInitialPointOnSurface().Returns(testObjPos);
+            Assert.AreEqual(testObjPos, testObj.GetInitialPointOnSurface());
         }
 
         [Test]
-        public void GetNormalAtPointAlwaysReturnsBoxUpVector(
-            [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
-            [NUnit.Framework.Values(-10.0)] double y,
-            [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
+        public void GetNormalAtPointPassesThroughToWrappedInstance()
         {
-            var pos = new Vector3((float)x, (float)y, (float)z);
-            Assert.AreEqual(testObj.transform.up, testObj.GetNormalAtPoint(pos));
+            surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(Vector3.forward);
+            var pos = GetRandomPoint();
+            Assert.AreEqual(Vector3.forward, testObj.GetNormalAtPoint(pos));
         }
 
         [Test]
-        public void GetWorldUpVectorReturnsBoxForwardVector()
+        public void GetWorldUpVectorPassesThroughToWrappedInstance()
         {
-            Assert.AreEqual(testObj.transform.forward, testObj.GetWorldUpVector());
+            surface.GetWorldUpVector().Returns(Vector3.up);
+            Assert.AreEqual(Vector3.up, testObj.GetWorldUpVector());
         }
 
         [Test]
-        public void GetSurfaceHeightAtPointAlwaysReturnsZero(
-            [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
-            [NUnit.Framework.Values(-10.0)] double y,
-            [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
+        public void ClampPointToSurfacePassesThroughToWrappedInstance()
         {
-            var pos = new Vector3((float)x, (float)y, (float)z);
-            Assert.AreEqual(0f, testObj.GetSurfaceHeightAtPoint(pos));
+            var expectedClampedPoint = GetRandomPoint();
+            surface.ClampPointToSurface(Arg.Any<Vector3>()).Returns(expectedClampedPoint);
+            var pos = GetRandomPoint();
+            Assert.AreEqual(expectedClampedPoint, testObj.ClampPointToSurface(pos));
         }
     }
 }

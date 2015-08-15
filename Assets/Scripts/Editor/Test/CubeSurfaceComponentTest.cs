@@ -9,11 +9,18 @@ namespace CamConTest
     public class CubeSurfaceComponentTest
     {
         private CubeSurfaceComponent testObj;
+        private CubeSurface surface;
+        private Vector3 testObjPos;
         private float sideLength = 10f;
 
         [SetUp]
         public void SetUp()
         {
+            surface = Substitute.For<CubeSurface>();
+            CubeSurface.TestInstance = surface;
+
+            testObjPos = new Vector3(50, 50, 50);
+
             var testObjGO = new GameObject();
             testObj = testObjGO.AddComponent<CubeSurfaceComponent>();
             testObj.sideLength = sideLength;
@@ -26,46 +33,43 @@ namespace CamConTest
         {
             GameObject.DestroyImmediate(testObj.gameObject);
             testObj = null;
+            CubeSurface.TestInstance = null;
+        }
+
+        private Vector3 GetRandomPoint()
+        {
+            return new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
         }
 
         [Test]
-        public void GetOriginReturnsSpecifiedOrigin()
+        public void GetInitialPointOnSurfacePassesThroughToWrappedInstance()
         {
-            Assert.AreEqual(testObj.transform.position, testObj.GetOrigin());
+            surface.GetInitialPointOnSurface().Returns(testObjPos);
+            Assert.AreEqual(testObjPos, testObj.GetInitialPointOnSurface());
         }
 
         [Test]
-        public void GetWorldUpVectorReturnsSpecifiedUpVector()
+        public void GetWorldUpVectorPassesThroughToWrappedInstance()
         {
-            Assert.AreEqual(testObj.transform.up, testObj.GetWorldUpVector());
+            surface.GetWorldUpVector().Returns(Vector3.up);
+            Assert.AreEqual(Vector3.up, testObj.GetWorldUpVector());
         }
 
         [Test]
-        public void GetNormalAtPointReturnsPositiveXUnitVectorWhenPointIsOnRightSide()
+        public void GetNormalAtPointPassesThroughToWrappedInstance()
         {
-            Assert.AreEqual(Vector3.right, testObj.GetNormalAtPoint(new Vector3(sideLength * .5f, 0f, 0f)));
+            surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(Vector3.forward);
+            var pos = GetRandomPoint();
+            Assert.AreEqual(Vector3.forward, testObj.GetNormalAtPoint(pos));
         }
 
         [Test]
-        public void GetNormalAtPointReturnsNegativeZUnitVectorWhenPointIsOnBackSide()
+        public void ClampPointToSurfacePassesThroughToWrappedInstance()
         {
-            Assert.AreEqual(-Vector3.forward, testObj.GetNormalAtPoint(new Vector3(0f, 0f, -sideLength * .5f)));
-        }
-
-        [Test]
-        public void GetNormalAtPointReturnsPositiveYUnitVectorWhenPointIsOnTopSide()
-        {
-            Assert.AreEqual(Vector3.up, testObj.GetNormalAtPoint(new Vector3(0f, sideLength * .5f, 0f)));
-        }
-
-        [Test]
-        public void GetSurfaceHeightAtPointAlwaysReturnsHalfSideLength(
-            [NUnit.Framework.Values(5.0, 0.0, 0.0, -5.0, 0.0, 0.0)] double x,
-            [NUnit.Framework.Values(0.0, 5.0, 0.0, 0.0, -5.0, 0.0)] double y,
-            [NUnit.Framework.Values(0.0, 0.0, 5.0, 0.0, 0.0, -5.0)] double z)
-        {
-            var pos = new Vector3((float)x, (float)y, (float)z);
-            Assert.AreEqual(.5f * sideLength, testObj.GetSurfaceHeightAtPoint(pos));
+            var expectedClampedPoint = GetRandomPoint();
+            surface.ClampPointToSurface(Arg.Any<Vector3>()).Returns(expectedClampedPoint);
+            var pos = GetRandomPoint();
+            Assert.AreEqual(expectedClampedPoint, testObj.ClampPointToSurface(pos));
         }
     }
 }
