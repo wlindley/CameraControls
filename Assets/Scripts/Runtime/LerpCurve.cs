@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace CamCon
 {
-    public class Lerper
+    public class LerpCurve
     {
         private LerperPair[] data;
 
-        public Lerper(params LerperPair[] dataPoints)
+        public LerpCurve(params LerperPair[] dataPoints)
         {
             this.data = dataPoints;
         }

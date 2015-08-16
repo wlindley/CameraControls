@@ -6,15 +6,15 @@ using CamCon;
 namespace CamConTest
 {
     [TestFixture]
-    public class LerperTest
+    public class LerpCurveTest
     {
-        private Lerper testObj;
+        private LerpCurve testObj;
 
         [Test]
         [ExpectedException(ExpectedException=typeof(LerperException), ExpectedMessage="Lerper has no data")]
         public void ProbeThrowsExceptionWhenNoKeyPointsAreDefined()
         {
-            testObj = new Lerper();
+            testObj = new LerpCurve();
             testObj.Probe(.5f);
         }
 
@@ -22,7 +22,7 @@ namespace CamConTest
         public void ProbeAlwaysReturnsDefinedValueWhenOnlyOneKeyPointWasDefined()
         {
             var expectedValue = 5f;
-            testObj = new Lerper(new LerperPair(.5f, expectedValue));
+            testObj = new LerpCurve(new LerperPair(.5f, expectedValue));
             AssertInputMapsToOutput(0f, expectedValue);
             AssertInputMapsToOutput(.5f, expectedValue);
             AssertInputMapsToOutput(1f, expectedValue);
@@ -31,7 +31,7 @@ namespace CamConTest
         [Test]
         public void ProbeReturnsLinearlyInterpolatedValuesWhenTwoKeyPointsAreDefined()
         {
-            testObj = new Lerper(new LerperPair(1f, 5f), new LerperPair(3f, 6f));
+            testObj = new LerpCurve(new LerperPair(1f, 5f), new LerperPair(3f, 6f));
             AssertInputMapsToOutput(1f, 5f);
             AssertInputMapsToOutput(1.5f, 5.25f);
             AssertInputMapsToOutput(2f, 5.5f);
@@ -42,21 +42,21 @@ namespace CamConTest
         [Test]
         public void ProbeReturnsFirstOutputValueWhenInputIsBelowMinimum()
         {
-            testObj = new Lerper(new LerperPair(10f, 5f), new LerperPair(20f, 10f));
+            testObj = new LerpCurve(new LerperPair(10f, 5f), new LerperPair(20f, 10f));
             AssertInputMapsToOutput(1f, 5f);
         }
 
         [Test]
         public void ProbeReturnsLastOutputValueWhenInputIsAboveMaximum()
         {
-            testObj = new Lerper(new LerperPair(10f, 5f), new LerperPair(20f, 10f));
+            testObj = new LerpCurve(new LerperPair(10f, 5f), new LerperPair(20f, 10f));
             AssertInputMapsToOutput(25f, 10f);
         }
 
         [Test]
         public void ProbeReturnsLinearlyInterpolatedValuesWhenThreeKeyPointsAreDefined()
         {
-            testObj = new Lerper(new LerperPair(1f, 5f), new LerperPair(3f, 6f), new LerperPair(5f, 8f));
+            testObj = new LerpCurve(new LerperPair(1f, 5f), new LerperPair(3f, 6f), new LerperPair(5f, 8f));
             AssertInputMapsToOutput(1f, 5f);
             AssertInputMapsToOutput(2f, 5.5f);
             AssertInputMapsToOutput(3f, 6f);
