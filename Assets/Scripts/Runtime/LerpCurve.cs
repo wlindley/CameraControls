@@ -6,9 +6,9 @@ namespace CamCon
 {
     public class LerpCurve
     {
-        private LerperPair[] data;
+        private CurveControlPoint[] data;
 
-        public LerpCurve(params LerperPair[] dataPoints)
+        public LerpCurve(params CurveControlPoint[] dataPoints)
         {
             this.data = dataPoints;
         }
@@ -16,7 +16,7 @@ namespace CamCon
         virtual public float Probe(float input)
         {
             if (0 == data.Length)
-                throw new LerperException("Lerper has no data");
+                throw new LerpCurveException("Lerper has no data");
             else if (1 == data.Length)
                 return data[0].Output;
 
@@ -38,23 +38,23 @@ namespace CamCon
             return GetOutputFromRange(percent, ref min, ref max);
         }
 
-        private float MapInputToRange(float input, ref LerperPair min, ref LerperPair max)
+        private float MapInputToRange(float input, ref CurveControlPoint min, ref CurveControlPoint max)
         {
             var percent = (input - min.Input) / (max.Input - min.Input);
             return Mathf.Clamp(percent, 0f, 1f);
         }
 
-        private float GetOutputFromRange(float percent, ref LerperPair min, ref LerperPair max)
+        private float GetOutputFromRange(float percent, ref CurveControlPoint min, ref CurveControlPoint max)
         {
             return min.Output + (percent * (max.Output - min.Output));
         }
     }
 
-    public struct LerperPair
+    public struct CurveControlPoint
     {
         private float input, output;
 
-        public LerperPair(float input, float output)
+        public CurveControlPoint(float input, float output)
         {
             this.input = input;
             this.output = output;
@@ -65,12 +65,12 @@ namespace CamCon
 
         public override string ToString()
         {
-            return String.Format("LerperPair: {0} -> {1}", input, output);
+            return String.Format("CurveControlPoint: {0} -> {1}", input, output);
         }
     }
 
-    public class LerperException : Exception
+    public class LerpCurveException : Exception
     {
-        public LerperException(string message) : base(message) { }
+        public LerpCurveException(string message) : base(message) { }
     }
 }
