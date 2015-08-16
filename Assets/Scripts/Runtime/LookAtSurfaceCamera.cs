@@ -45,11 +45,20 @@ namespace CamCon
             UpdateTransform();
         }
 
-        private void UpdateTransform()
+        protected virtual void UpdateTransform()
+        {
+            transform.position = CalculatePointDirectlyAboveLookTarget();
+            PointCameraAtLookTarget();
+        }
+
+        protected Vector3 CalculatePointDirectlyAboveLookTarget()
         {
             var normal = Surface.GetNormalAtPoint(lookTarget);
-            transform.position = lookTarget + (distanceToTarget * normal);
-            //transform.localRotation.SetLookRotation(lookTarget - transform.position, Surface.GetWorldUpVector());
+            return lookTarget + (distanceToTarget * normal);
+        }
+
+        protected void PointCameraAtLookTarget()
+        {
             transform.LookAt(lookTarget, Surface.GetWorldUpVector());
         }
     }
