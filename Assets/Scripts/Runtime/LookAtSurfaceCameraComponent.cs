@@ -4,11 +4,11 @@ namespace CamCon
 {
     public class LookAtSurfaceCameraComponent : LookAtSurfaceCamera
     {
-        public SurfaceComponent surfaceObj;
+        public SurfaceComponent surface;
 
         public override void Start()
         {
-            base.Surface = surfaceObj;
+            base.Surface = surface;
             base.Start();
         }
     }

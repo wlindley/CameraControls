@@ -8,7 +8,7 @@ namespace CamCon
 
         protected override void UpdateTransform()
         {
-            var cameraAngle = Curve.Probe(distanceToTarget);
+            var cameraAngle = Curve.Probe(distanceToTarget) * Mathf.Deg2Rad;
             var offsetMagnitude = distanceToTarget * Mathf.Cos(cameraAngle);
             var heightFromSurface = distanceToTarget * Mathf.Sin(cameraAngle);
             var normal = Surface.GetNormalAtPoint(lookTarget);

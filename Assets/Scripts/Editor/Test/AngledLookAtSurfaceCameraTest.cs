@@ -48,13 +48,13 @@ namespace CamConTest
         public void SetDistanceToTargetSetsCameraAngleBasedOnCurve()
         {
             var cameraDistance = curvePoints[0].Input;
-            var cameraAngle = curvePoints[0].Output;
+            var cameraAngle = curvePoints[0].Output * Mathf.Deg2Rad;
             testObj.SetDistanceToTarget(cameraDistance);
 
             var lookTarget = surface.GetInitialPointOnSurface();
 
             AssertTestObjLookingAt(lookTarget);
-            Assert.AreEqual(cameraDistance, (testObj.transform.position - lookTarget).magnitude, float.Epsilon);
+            Assert.IsTrue(Mathf.Approximately(cameraDistance, (testObj.transform.position - lookTarget).magnitude), string.Format("Expected {0}, but got {1}", cameraDistance, (testObj.transform.position - lookTarget).magnitude));
 
             var offsetLength = cameraDistance * Mathf.Cos(cameraAngle);
             var cameraHeight = cameraDistance * Mathf.Sin(cameraAngle);
@@ -66,13 +66,13 @@ namespace CamConTest
         public void SetDistanceToTargetSetsCameraAngleBasedOnCurveAgain()
         {
             var cameraDistance = curvePoints[1].Input;
-            var cameraAngle = curvePoints[1].Output;
+            var cameraAngle = curvePoints[1].Output * Mathf.Deg2Rad;
             testObj.SetDistanceToTarget(cameraDistance);
 
             var lookTarget = surface.GetInitialPointOnSurface();
 
             AssertTestObjLookingAt(lookTarget);
-            Assert.AreEqual(cameraDistance, (testObj.transform.position - lookTarget).magnitude, float.Epsilon);
+            Assert.IsTrue(Mathf.Approximately(cameraDistance, (testObj.transform.position - lookTarget).magnitude), string.Format("Expected {0}, but got {1}", cameraDistance, (testObj.transform.position - lookTarget).magnitude));
 
             var offsetLength = cameraDistance * Mathf.Cos(cameraAngle);
             var cameraHeight = cameraDistance * Mathf.Sin(cameraAngle);
