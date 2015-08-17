@@ -49,17 +49,7 @@ namespace CamConTest
         {
             var cameraDistance = curvePoints[0].Input;
             var cameraAngle = curvePoints[0].Output * Mathf.Deg2Rad;
-            testObj.SetDistanceToTarget(cameraDistance);
-
-            var lookTarget = surface.GetInitialPointOnSurface();
-
-            AssertTestObjLookingAt(lookTarget);
-            Assert.IsTrue(Mathf.Approximately(cameraDistance, (testObj.transform.position - lookTarget).magnitude), string.Format("Expected {0}, but got {1}", cameraDistance, (testObj.transform.position - lookTarget).magnitude));
-
-            var offsetLength = cameraDistance * Mathf.Cos(cameraAngle);
-            var cameraHeight = cameraDistance * Mathf.Sin(cameraAngle);
-            var expectedCameraPosition = lookTarget + (surfaceNormal * cameraHeight) + (-surfaceUp * offsetLength);
-            Assert.IsTrue(expectedCameraPosition == testObj.transform.position, string.Format("Expcted {0}, but received {1}", expectedCameraPosition, testObj.transform.position));
+            AssertCameraIsLookingAtTargetWithCorrectAngle(cameraDistance, cameraAngle);
         }
 
         [Test]
@@ -67,17 +57,32 @@ namespace CamConTest
         {
             var cameraDistance = curvePoints[1].Input;
             var cameraAngle = curvePoints[1].Output * Mathf.Deg2Rad;
+            AssertCameraIsLookingAtTargetWithCorrectAngle(cameraDistance, cameraAngle);
+        }
+
+        private void AssertCameraIsLookingAtTargetWithCorrectAngle(float cameraDistance, float cameraAngle)
+        {
             testObj.SetDistanceToTarget(cameraDistance);
 
             var lookTarget = surface.GetInitialPointOnSurface();
 
             AssertTestObjLookingAt(lookTarget);
-            Assert.IsTrue(Mathf.Approximately(cameraDistance, (testObj.transform.position - lookTarget).magnitude), string.Format("Expected {0}, but got {1}", cameraDistance, (testObj.transform.position - lookTarget).magnitude));
+            AssertApproximatelyEqual(cameraDistance, (testObj.transform.position - lookTarget).magnitude);
 
             var offsetLength = cameraDistance * Mathf.Cos(cameraAngle);
             var cameraHeight = cameraDistance * Mathf.Sin(cameraAngle);
             var expectedCameraPosition = lookTarget + (surfaceNormal * cameraHeight) + (-surfaceUp * offsetLength);
-            Assert.IsTrue(expectedCameraPosition == testObj.transform.position, string.Format("Expcted {0}, but received {1}", expectedCameraPosition, testObj.transform.position));
+            AssertPositionsApproximatelyEqual(expectedCameraPosition, testObj.transform.position;);
+        }
+
+        private void AssertApproximatelyEqual(float expected, float actual)
+        {
+            Assert.IsTrue(Mathf.Approximately(expected, actual), string.Format("Expected {0}, but got {1}", expected, actual);
+        }
+
+        private void AssertPositionsApproximatelyEqual(Vector3 expected, Vector3 actual)
+        {
+            Assert.IsTrue(expected == actual, string.Format("Expected {0}, but received {1}", expected, actual));
         }
 
         private void AssertTestObjLookingAt(Vector3 position)
