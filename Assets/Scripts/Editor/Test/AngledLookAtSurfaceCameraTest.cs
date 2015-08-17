@@ -72,12 +72,12 @@ namespace CamConTest
             var offsetLength = cameraDistance * Mathf.Cos(cameraAngle);
             var cameraHeight = cameraDistance * Mathf.Sin(cameraAngle);
             var expectedCameraPosition = lookTarget + (surfaceNormal * cameraHeight) + (-surfaceUp * offsetLength);
-            AssertPositionsApproximatelyEqual(expectedCameraPosition, testObj.transform.position;);
+            AssertPositionsApproximatelyEqual(expectedCameraPosition, testObj.transform.position);
         }
 
         private void AssertApproximatelyEqual(float expected, float actual)
         {
-            Assert.IsTrue(Mathf.Approximately(expected, actual), string.Format("Expected {0}, but got {1}", expected, actual);
+            Assert.IsTrue(Mathf.Approximately(expected, actual), string.Format("Expected {0}, but got {1}", expected, actual));
         }
 
         private void AssertPositionsApproximatelyEqual(Vector3 expected, Vector3 actual)
