@@ -6,8 +6,8 @@ namespace CamCon
     public class LookAtSurfaceCamera : MonoBehaviour
     {
         public const float InitialDistanceToTarget = 1f;
-        private Vector3 lookTarget;
-        private float distanceToTarget;
+        protected Vector3 lookTarget;
+        protected float distanceToTarget;
 
         public Surface Surface { get; set; }
 
