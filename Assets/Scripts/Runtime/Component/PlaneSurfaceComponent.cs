@@ -8,13 +8,10 @@ namespace CamCon
         public float renderSize = 100f;
         private PlaneSurface surface;
 
-        public void Awake()
-        {
-            surface = PlaneSurface.GetInstance(transform.position, transform.up, transform.forward);
-        }
-
         internal override Surface GetSurface()
         {
+            if (null == surface)
+                surface = PlaneSurface.GetInstance(transform.position, transform.up, transform.forward);
             return surface;
         }
 

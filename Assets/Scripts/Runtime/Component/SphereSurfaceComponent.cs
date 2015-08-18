@@ -8,13 +8,10 @@ namespace CamCon
         public float radius = 10f;
         private SphereSurface surface;
 
-        public void Awake()
-        {
-            surface = SphereSurface.GetInstance(transform.position, radius, transform.up);
-        }
-
         internal override Surface GetSurface()
         {
+            if (null == surface)
+                surface = SphereSurface.GetInstance(transform.position, radius, transform.up);
             return surface;
         }
 

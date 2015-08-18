@@ -96,7 +96,7 @@ namespace CamConTest
         }
 
         [Test]
-        public void MoveLeftMovesCamerasLookTargetAlongLeftVectorBySpeedTimesTimeDelta()
+        public void MoveLeftMovesCamerasLookTargetAlongRightVectorBySpeedTimesTimeDelta()
         {
             var initialTarget = camera.GetLookTarget();
             var timeDelta = .25f;
@@ -104,13 +104,13 @@ namespace CamConTest
             testObj.MoveLeft(timeDelta);
 
             var finalTarget = camera.GetLookTarget();
-            var leftVector = Vector3.Cross(surfaceNormal, surfaceUp);
-            var expectedDelta = surfaceOrigin + (leftVector * panSpeed * timeDelta);
+            var rightVector = Vector3.Cross(surfaceNormal, surfaceUp);
+            var expectedDelta = surfaceOrigin - (rightVector * panSpeed * timeDelta);
             TestUtil.AssertApproximatelyEqual(expectedDelta, finalTarget - initialTarget);
         }
 
         [Test]
-        public void MoveRightMovesCamerasLookTargetAlongLeftVectorBySpeedTimesTimeDelta()
+        public void MoveRightMovesCamerasLookTargetAlongRightVectorBySpeedTimesTimeDelta()
         {
             var initialTarget = camera.GetLookTarget();
             var timeDelta = .25f;
@@ -118,8 +118,8 @@ namespace CamConTest
             testObj.MoveRight(timeDelta);
 
             var finalTarget = camera.GetLookTarget();
-            var leftVector = Vector3.Cross(surfaceNormal, surfaceUp);
-            var expectedDelta = surfaceOrigin - (leftVector * panSpeed * timeDelta);
+            var rightVector = Vector3.Cross(surfaceNormal, surfaceUp);
+            var expectedDelta = surfaceOrigin + (rightVector * panSpeed * timeDelta);
             TestUtil.AssertApproximatelyEqual(expectedDelta, finalTarget - initialTarget);
         }
     }

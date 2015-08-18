@@ -2,9 +2,15 @@
 
 namespace CamCon
 {
-    public class LookAtSurfaceCameraDebugger : MonoBehaviour
+    public class MoverInputHandler : MonoBehaviour
     {
-        public LookAtSurfaceCameraMover mover;
+        public MoverComponent mover;
+        private LookAtSurfaceCameraMover cameraMover;
+
+        private void Awake()
+        {
+            cameraMover = mover.GetMover();
+        }
 
         private void Update()
         {
@@ -24,32 +30,32 @@ namespace CamCon
 
         private void MoveUp()
         {
-            mover.MoveOut(Time.deltaTime);
+            cameraMover.MoveOut(Time.deltaTime);
         }
 
         private void MoveDown()
         {
-            mover.MoveIn(Time.deltaTime);
+            cameraMover.MoveIn(Time.deltaTime);
         }
 
         private void MoveForward()
         {
-            mover.MoveUp(Time.deltaTime);
+            cameraMover.MoveUp(Time.deltaTime);
         }
 
         private void MoveBackward()
         {
-            mover.MoveDown(Time.deltaTime);
+            cameraMover.MoveDown(Time.deltaTime);
         }
 
         private void MoveLeft()
         {
-            mover.MoveLeft(Time.deltaTime);
+            cameraMover.MoveLeft(Time.deltaTime);
         }
 
         private void MoveRight()
         {
-            mover.MoveRight(Time.deltaTime);
+            cameraMover.MoveRight(Time.deltaTime);
         }
     }
 }
