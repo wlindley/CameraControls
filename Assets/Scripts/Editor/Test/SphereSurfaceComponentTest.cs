@@ -45,14 +45,14 @@ namespace CamConTest
         public void GetInitialPointOnSurfacePassesThroughToWrappedInstance()
         {
             surface.GetInitialPointOnSurface().Returns(testObjPos);
-            Assert.AreEqual(testObjPos, testObj.GetInitialPointOnSurface());
+            TestUtil.AssertApproximatelyEqual(testObjPos, testObj.GetInitialPointOnSurface());
         }
 
         [Test]
         public void GetWorldUpVectorPassesThroughToWrappedInstance()
         {
             surface.GetWorldUpVector().Returns(Vector3.up);
-            Assert.AreEqual(Vector3.up, testObj.GetWorldUpVector());
+            TestUtil.AssertApproximatelyEqual(Vector3.up, testObj.GetWorldUpVector());
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace CamConTest
         {
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(Vector3.forward);
             var pos = GetRandomPoint();
-            Assert.AreEqual(Vector3.forward, testObj.GetNormalAtPoint(pos));
+            TestUtil.AssertApproximatelyEqual(Vector3.forward, testObj.GetNormalAtPoint(pos));
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace CamConTest
             var expectedClampedPoint = GetRandomPoint();
             surface.ClampPointToSurface(Arg.Any<Vector3>()).Returns(expectedClampedPoint);
             var pos = GetRandomPoint();
-            Assert.AreEqual(expectedClampedPoint, testObj.ClampPointToSurface(pos));
+            TestUtil.AssertApproximatelyEqual(expectedClampedPoint, testObj.ClampPointToSurface(pos));
         }
     }
 }

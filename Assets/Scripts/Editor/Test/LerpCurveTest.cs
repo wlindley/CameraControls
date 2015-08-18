@@ -66,12 +66,7 @@ namespace CamConTest
 
         private void AssertInputMapsToOutput(float input, float output)
         {
-            AssertAreClose(output, testObj.Probe(input));
-        }
-
-        private void AssertAreClose(float expected, float actual)
-        {
-            Assert.AreEqual(expected, actual, float.Epsilon);
+            TestUtil.AssertApproximatelyEqual(output, testObj.Probe(input));
         }
     }
 }

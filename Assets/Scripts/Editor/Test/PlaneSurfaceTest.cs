@@ -25,20 +25,20 @@ namespace CamConTest
         [Test]
         public void GetInitialPointOnSurfaceReturnsSpecifiedOrigin()
         {
-            Assert.AreEqual(origin, testObj.GetInitialPointOnSurface());
+            TestUtil.AssertApproximatelyEqual(origin, testObj.GetInitialPointOnSurface());
         }
 
         [Test]
         public void GetWorldUpVectorReturnsSpecifiedUpVector()
         {
-            Assert.AreEqual(up, testObj.GetWorldUpVector());
+            TestUtil.AssertApproximatelyEqual(up, testObj.GetWorldUpVector());
         }
 
         [Test]
         public void NormalIsUnitVector()
         {
             testObj = new PlaneSurface(origin, normal * 10f, up);
-            Assert.AreEqual(1f, testObj.GetNormalAtPoint(origin).magnitude);
+            TestUtil.AssertApproximatelyEqual(1f, testObj.GetNormalAtPoint(origin).magnitude);
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace CamConTest
             [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
         {
             var pos = new Vector3((float)x, (float)y, (float)z);
-            Assert.AreEqual(normal, testObj.GetNormalAtPoint(pos));
+            TestUtil.AssertApproximatelyEqual(normal, testObj.GetNormalAtPoint(pos));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace CamConTest
             [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
         {
             var pos = new Vector3((float)x, (float)y, (float)z);
-            Assert.AreEqual(new Vector3((float)x, (float)y, origin.z), testObj.ClampPointToSurface(pos));
+            TestUtil.AssertApproximatelyEqual(new Vector3((float)x, (float)y, origin.z), testObj.ClampPointToSurface(pos));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace CamConTest
             var distanceFromSurface = Vector3.Dot(delta, normal.normalized);
             var pointOnSurface = pos - (distanceFromSurface * normal.normalized);
 
-            Assert.AreEqual(pointOnSurface, testObj.ClampPointToSurface(pos));
+            TestUtil.AssertApproximatelyEqual(pointOnSurface, testObj.ClampPointToSurface(pos));
         }
     }
 }

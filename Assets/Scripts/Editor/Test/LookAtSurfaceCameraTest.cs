@@ -47,11 +47,11 @@ namespace CamConTest
 
             testObj.Start();
 
-            Assert.AreEqual(origin + (normalAtOrigin * LookAtSurfaceCamera.InitialDistanceToTarget), testObj.transform.position);
-            Assert.IsTrue(-normalAtOrigin == testObj.transform.forward);
-            Assert.IsTrue(worldUp == testObj.transform.up);
-            Assert.AreEqual(origin, testObj.GetLookTarget());
-            Assert.AreEqual(1f, testObj.GetDistanceToTarget());
+            TestUtil.AssertApproximatelyEqual(origin + (normalAtOrigin * LookAtSurfaceCamera.InitialDistanceToTarget), testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(-normalAtOrigin, testObj.transform.forward);
+            TestUtil.AssertApproximatelyEqual(worldUp, testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(origin, testObj.GetLookTarget());
+            TestUtil.AssertApproximatelyEqual(1f, testObj.GetDistanceToTarget());
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace CamConTest
             testObj.Start();
             testObj.TranslateLookTargetAndDistance(pos, distance);
 
-            Assert.AreEqual(pos + (normal * distance), testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(pos + (normal * distance), testObj.transform.position);
         }
 
         [Test]
@@ -82,10 +82,10 @@ namespace CamConTest
             testObj.Start();
             testObj.SetDistanceToTarget(distance);
 
-            Assert.AreEqual(origin + (normalAtOrigin * distance), testObj.transform.position);
-            Assert.IsTrue(-normalAtOrigin == testObj.transform.forward);
-            Assert.IsTrue(worldUp == testObj.transform.up);
-            Assert.AreEqual(distance, testObj.GetDistanceToTarget());
+            TestUtil.AssertApproximatelyEqual(origin + (normalAtOrigin * distance), testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(-normalAtOrigin, testObj.transform.forward);
+            TestUtil.AssertApproximatelyEqual(worldUp, testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(distance, testObj.GetDistanceToTarget());
         }
 
         [Test]
@@ -104,10 +104,10 @@ namespace CamConTest
             testObj.SetDistanceToTarget(distance);
             testObj.TranslateLookTargetTo(newTarget);
 
-            Assert.AreEqual(newTarget + (normal * distance), testObj.transform.position);
-            Assert.IsTrue(-normal == testObj.transform.forward);
-            Assert.IsTrue(worldUp == testObj.transform.up);
-            Assert.AreEqual(newTarget, testObj.GetLookTarget());
+            TestUtil.AssertApproximatelyEqual(newTarget + (normal * distance), testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(-normal, testObj.transform.forward);
+            TestUtil.AssertApproximatelyEqual(worldUp, testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(newTarget, testObj.GetLookTarget());
         }
 
         [Test]
@@ -128,8 +128,8 @@ namespace CamConTest
             testObj.SetDistanceToTarget(distance);
             testObj.TranslateLookTargetTo(newTarget);
 
-            Assert.AreEqual(newTarget + (normalAtNewTarget * distance), testObj.transform.position);
-            Assert.IsTrue(-normalAtNewTarget == testObj.transform.forward);
+            TestUtil.AssertApproximatelyEqual(newTarget + (normalAtNewTarget * distance), testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(-normalAtNewTarget, testObj.transform.forward);
             //Assert.IsTrue(worldUp == testObj.transform.up);
         }
 

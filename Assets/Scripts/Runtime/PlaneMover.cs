@@ -21,41 +21,48 @@ namespace CamCon
         {
             var lookTarget = camera.GetLookTarget();
             var left = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetWorldUpVector());
-            camera.TranslateLookTargetTo(lookTarget + (left * panSpeed * dt));
+            MoveLookTargetBy(left * panSpeed * dt);
         }
 
         public void MoveRight(float dt)
         {
             var lookTarget = camera.GetLookTarget();
             var left = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetWorldUpVector());
-            camera.TranslateLookTargetTo(lookTarget - (left * panSpeed * dt));
+            MoveLookTargetBy(-left * panSpeed * dt);
         }
 
         public void MoveUp(float dt)
         {
-            var lookTarget = camera.GetLookTarget();
             var up = surface.GetWorldUpVector();
-            camera.TranslateLookTargetTo(lookTarget + (up * panSpeed * dt));
+            MoveLookTargetBy(up * panSpeed * dt);
         }
 
         public void MoveDown(float dt)
         {
-            var lookTarget = camera.GetLookTarget();
             var up = surface.GetWorldUpVector();
-            camera.TranslateLookTargetTo(lookTarget - (up * panSpeed * dt));
+            MoveLookTargetBy(-up * panSpeed * dt);
         }
 
         public void MoveIn(float dt)
         {
-            var distance = camera.GetDistanceToTarget();
-            distance -= zoomSpeed * dt;
-            camera.SetDistanceToTarget(distance);
+            IncreaseDistanceBy(-zoomSpeed * dt);
         }
 
         public void MoveOut(float dt)
         {
+            IncreaseDistanceBy(zoomSpeed * dt);
+        }
+
+        private void MoveLookTargetBy(Vector3 delta)
+        {
+            var lookTarget = camera.GetLookTarget();
+            camera.TranslateLookTargetTo(lookTarget + delta);
+        }
+
+        private void IncreaseDistanceBy(float delta)
+        {
             var distance = camera.GetDistanceToTarget();
-            distance += zoomSpeed * dt;
+            distance += delta;
             camera.SetDistanceToTarget(distance);
         }
     }

@@ -26,13 +26,13 @@ namespace CamConTest
         public void GetInitialPositionOnSurfaceReturnsArbitraryPointOnSurface()
         {
             var diff = testObj.GetInitialPointOnSurface() - origin;
-            Assert.AreEqual(radius, diff.magnitude);
+            TestUtil.AssertApproximatelyEqual(radius, diff.magnitude);
         }
 
         [Test]
         public void GetWorldUpVectorReturnsSpecifiedUpVector()
         {
-            Assert.AreEqual(up, testObj.GetWorldUpVector());
+            TestUtil.AssertApproximatelyEqual(up, testObj.GetWorldUpVector());
         }
 
         [Test]
@@ -42,11 +42,11 @@ namespace CamConTest
             [NUnit.Framework.Values(5.0)] double radius)
         {
             var pos = origin + (Quaternion.Euler((float)theta, 0f, (float)row) * new Vector3((float)radius, 0f, 0f));
-            Assert.AreEqual((float)radius, (pos - origin).magnitude);
+            TestUtil.AssertApproximatelyEqual((float)radius, (pos - origin).magnitude);
 
             var normal = testObj.GetNormalAtPoint(pos);
-            Assert.IsTrue(Mathf.Approximately(1f, normal.magnitude));
-            Assert.AreEqual((pos - origin).normalized, normal);
+            TestUtil.AssertApproximatelyEqual(1f, normal.magnitude);
+            TestUtil.AssertApproximatelyEqual((pos - origin).normalized, normal);
         }
 
         [Test]
@@ -56,11 +56,11 @@ namespace CamConTest
             [NUnit.Framework.Values(5.5, 10f)] double radiusToPoint)
         {
             var pos = origin + (Quaternion.Euler((float)theta, 0f, (float)row) * new Vector3((float)radiusToPoint, 0f, 0f));
-            Assert.IsTrue(Mathf.Approximately((float)radiusToPoint, (pos - origin).magnitude));
+            TestUtil.AssertApproximatelyEqual((float)radiusToPoint, (pos - origin).magnitude);
 
             var surfacePoint = testObj.ClampPointToSurface(pos);
-            Assert.IsTrue(Mathf.Approximately((float)radius, (surfacePoint - origin).magnitude));
-            Assert.AreEqual(origin + ((pos - origin).normalized * (float)radius), surfacePoint);
+            TestUtil.AssertApproximatelyEqual((float)radius, (surfacePoint - origin).magnitude);
+            TestUtil.AssertApproximatelyEqual(origin + ((pos - origin).normalized * (float)radius), surfacePoint);
         }
 
         [Test]
@@ -70,11 +70,11 @@ namespace CamConTest
             [NUnit.Framework.Values(4.5, 1f)] double radiusToPoint)
         {
             var pos = origin + (Quaternion.Euler((float)theta, 0f, (float)row) * new Vector3((float)radiusToPoint, 0f, 0f));
-            Assert.IsTrue(Mathf.Approximately((float)radiusToPoint, (pos - origin).magnitude));
+            TestUtil.AssertApproximatelyEqual((float)radiusToPoint, (pos - origin).magnitude);
 
             var surfacePoint = testObj.ClampPointToSurface(pos);
-            Assert.IsTrue(Mathf.Approximately((float)radius, (surfacePoint - origin).magnitude));
-            Assert.AreEqual(origin + ((pos - origin).normalized * (float)radius), surfacePoint);
+            TestUtil.AssertApproximatelyEqual((float)radius, (surfacePoint - origin).magnitude);
+            TestUtil.AssertApproximatelyEqual(origin + ((pos - origin).normalized * (float)radius), surfacePoint);
         }
     }
 }

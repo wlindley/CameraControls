@@ -63,7 +63,7 @@ namespace CamConTest
             expectedPos.x = Mathf.Clamp(pos.x, -.5f * sideLength, .5f * sideLength);
             expectedPos.y = Mathf.Clamp(pos.y, -.5f * sideLength, .5f * sideLength);
             expectedPos.z = Mathf.Clamp(pos.z, -.5f * sideLength, .5f * sideLength);
-            Assert.AreEqual(expectedPos, testObj.ClampPointToSurface(pos));
+            TestUtil.AssertApproximatelyEqual(expectedPos, testObj.ClampPointToSurface(pos));
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace CamConTest
             if (Mathf.Approximately(diff.z, maxComponentMagnitude))
                 expectedDelta.z = .5f * sideLength * (diff.z / Mathf.Abs(diff.z));
 
-            Assert.AreEqual(origin + expectedDelta, testObj.ClampPointToSurface(pos));
+            TestUtil.AssertApproximatelyEqual(origin + expectedDelta, testObj.ClampPointToSurface(pos));
         }
     }
 }
