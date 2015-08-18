@@ -11,7 +11,7 @@ namespace CamCon
         internal override Surface GetSurface()
         {
             if (null == surface)
-                surface = PlaneSurface.GetInstance(transform.position, transform.up, transform.forward);
+                surface = new PlaneSurface(transform.position, transform.up, transform.forward);
             return surface;
         }
 

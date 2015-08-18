@@ -3,17 +3,26 @@ using System;
 
 namespace CamCon
 {
-    public class LookAtSurfaceCamera : MonoBehaviour
+    public class LookAtSurfaceCamera
     {
         public const float InitialDistanceToTarget = 1f;
+
+        protected Transform transform;
+        protected Surface Surface;
         protected Vector3 lookTarget;
         protected float distanceToTarget;
 
-        public Surface Surface { get; set; }
+        public LookAtSurfaceCamera() : this(null, null) { }
 
-        public virtual void Start()
+        public LookAtSurfaceCamera(Transform transform, Surface surface)
         {
-            TranslateLookTargetAndDistance(Surface.GetInitialPointOnSurface(), 1f);
+            this.transform = transform;
+            this.Surface = surface;
+        }
+
+        public virtual void InitializeCamera()
+        {
+            TranslateLookTargetAndDistance(Surface.GetInitialPointOnSurface(), InitialDistanceToTarget);
         }
 
         public virtual Vector3 GetLookTarget()

@@ -9,8 +9,6 @@ namespace CamCon
         private float radius;
         private Vector3 up;
 
-        public SphereSurface() : this(Vector3.zero, 1f, Vector3.up) { }
-
         public SphereSurface(Vector3 origin, float radius, Vector3 up)
         {
             this.origin = origin;

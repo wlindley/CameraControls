@@ -2,14 +2,20 @@
 
 namespace CamCon
 {
-    public class LookAtSurfaceCameraComponent : LookAtSurfaceCamera
+    public class LookAtSurfaceCameraComponent : CameraComponent
     {
         public SurfaceComponent surface;
 
-        public override void Start()
+        private LookAtSurfaceCamera cam;
+
+        internal override LookAtSurfaceCamera GetCamera()
         {
-            base.Surface = surface.GetSurface();
-            base.Start();
+            if (null == cam)
+            {
+                cam = new LookAtSurfaceCamera(transform, surface.GetSurface());
+                cam.InitializeCamera();
+            }
+            return cam;
         }
     }
 }

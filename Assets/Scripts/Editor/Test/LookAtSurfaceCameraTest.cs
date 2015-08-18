@@ -9,30 +9,35 @@ namespace CamConTest
     public class LookAtSurfaceCameraTest
     {
         private LookAtSurfaceCamera testObj;
-        private SphereCollider target;
+        private Transform testTransform;
+        private Transform targetTransform;
         private Surface surface;
 
         [SetUp]
         public void SetUp()
         {
-            var testObjGO = new GameObject();
-            testObj = testObjGO.AddComponent<LookAtSurfaceCamera>();
-
-            surface = Substitute.For<Surface>();
-            testObj.Surface = surface;
+            var testGO = new GameObject();
+            testTransform = testGO.transform;
 
             var targetGO = new GameObject();
-            target = targetGO.AddComponent<SphereCollider>();
-            target.radius = .25f;
+            targetTransform = targetGO.transform;
+
+            surface = Substitute.For<Surface>();
+        }
+
+        private void BuildTestObj()
+        {
+            testObj = new LookAtSurfaceCamera(testTransform, surface);
+            testObj.InitializeCamera();
         }
 
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(testObj.gameObject);
-            testObj = null;
-            GameObject.DestroyImmediate(target.gameObject);
-            target = null;
+            GameObject.DestroyImmediate(testTransform.gameObject);
+            testTransform = null;
+            GameObject.DestroyImmediate(targetTransform.gameObject);
+            targetTransform = null;
         }
 
         [Test]
@@ -45,11 +50,11 @@ namespace CamConTest
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
             surface.GetWorldUpVector().Returns(worldUp);
 
-            testObj.Start();
+            BuildTestObj();
 
-            TestUtil.AssertApproximatelyEqual(origin + (normalAtOrigin * LookAtSurfaceCamera.InitialDistanceToTarget), testObj.transform.position);
-            TestUtil.AssertApproximatelyEqual(-normalAtOrigin, testObj.transform.forward);
-            TestUtil.AssertApproximatelyEqual(worldUp, testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(origin + (normalAtOrigin * LookAtSurfaceCamera.InitialDistanceToTarget), testTransform.position);
+            TestUtil.AssertApproximatelyEqual(-normalAtOrigin, testTransform.forward);
+            TestUtil.AssertApproximatelyEqual(worldUp, testTransform.up);
             TestUtil.AssertApproximatelyEqual(origin, testObj.GetLookTarget());
             TestUtil.AssertApproximatelyEqual(1f, testObj.GetDistanceToTarget());
         }
@@ -62,10 +67,10 @@ namespace CamConTest
             var distance = 2f;
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normal);
 
-            testObj.Start();
+            BuildTestObj();
             testObj.TranslateLookTargetAndDistance(pos, distance);
 
-            TestUtil.AssertApproximatelyEqual(pos + (normal * distance), testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(pos + (normal * distance), testTransform.position);
         }
 
         [Test]
@@ -79,12 +84,12 @@ namespace CamConTest
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
             surface.GetWorldUpVector().Returns(worldUp);
 
-            testObj.Start();
+            BuildTestObj();
             testObj.SetDistanceToTarget(distance);
 
-            TestUtil.AssertApproximatelyEqual(origin + (normalAtOrigin * distance), testObj.transform.position);
-            TestUtil.AssertApproximatelyEqual(-normalAtOrigin, testObj.transform.forward);
-            TestUtil.AssertApproximatelyEqual(worldUp, testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(origin + (normalAtOrigin * distance), testTransform.position);
+            TestUtil.AssertApproximatelyEqual(-normalAtOrigin, testTransform.forward);
+            TestUtil.AssertApproximatelyEqual(worldUp, testTransform.up);
             TestUtil.AssertApproximatelyEqual(distance, testObj.GetDistanceToTarget());
         }
 
@@ -100,13 +105,13 @@ namespace CamConTest
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normal);
             surface.GetWorldUpVector().Returns(worldUp);
 
-            testObj.Start();
+            BuildTestObj();
             testObj.SetDistanceToTarget(distance);
             testObj.TranslateLookTargetTo(newTarget);
 
-            TestUtil.AssertApproximatelyEqual(newTarget + (normal * distance), testObj.transform.position);
-            TestUtil.AssertApproximatelyEqual(-normal, testObj.transform.forward);
-            TestUtil.AssertApproximatelyEqual(worldUp, testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(newTarget + (normal * distance), testTransform.position);
+            TestUtil.AssertApproximatelyEqual(-normal, testTransform.forward);
+            TestUtil.AssertApproximatelyEqual(worldUp, testTransform.up);
             TestUtil.AssertApproximatelyEqual(newTarget, testObj.GetLookTarget());
         }
 
@@ -124,21 +129,19 @@ namespace CamConTest
             surface.GetNormalAtPoint(newTarget).Returns(normalAtNewTarget);
             surface.GetWorldUpVector().Returns(worldUp);
 
-            testObj.Start();
+            BuildTestObj();
             testObj.SetDistanceToTarget(distance);
             testObj.TranslateLookTargetTo(newTarget);
 
-            TestUtil.AssertApproximatelyEqual(newTarget + (normalAtNewTarget * distance), testObj.transform.position);
-            TestUtil.AssertApproximatelyEqual(-normalAtNewTarget, testObj.transform.forward);
-            //Assert.IsTrue(worldUp == testObj.transform.up);
+            TestUtil.AssertApproximatelyEqual(newTarget + (normalAtNewTarget * distance), testTransform.position);
+            TestUtil.AssertApproximatelyEqual(-normalAtNewTarget, testTransform.forward);
+            //Assert.IsTrue(worldUp == testTransform.up);
         }
 
         private void AssertCameraLookingAt(Vector3 pos)
         {
-            target.transform.position = pos;
-            RaycastHit hitInfo;
-            Assert.IsTrue(Physics.Raycast(testObj.transform.position, testObj.transform.forward, out hitInfo));
-            Assert.AreEqual(target, hitInfo.collider);
+            var diff = targetTransform.position - testTransform.position;
+            TestUtil.AssertApproximatelyEqual(testTransform.forward, diff.normalized);
         }
     }
 }

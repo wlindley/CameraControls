@@ -3,21 +3,29 @@ using System;
 
 namespace CamCon
 {
-    public class AngledLookAtSurfaceCameraComponent : AngledLookAtSurfaceCamera
+    public class AngledLookAtSurfaceCameraComponent : CameraComponent
     {
         public SurfaceComponent surface;
         public CameraControlPoint[] controlPoints;
 
-        public override void Start()
-        {
-            base.Surface = surface.GetSurface();
+        private AngledLookAtSurfaceCamera cam;
 
+        internal override LookAtSurfaceCamera GetCamera()
+        {
+            if (null == cam)
+                BuildCamera();
+            return cam;
+        }
+
+        private void BuildCamera()
+        {
             var curvePoints = new CurveControlPoint[controlPoints.Length];
             for (var i = 0; i < controlPoints.Length; i++)
                 curvePoints[i] = new CurveControlPoint(controlPoints[i].distanceToLookTarget, controlPoints[i].cameraAngle);
-            base.Curve = new LerpCurve(curvePoints);
+            var curve = new LerpCurve(curvePoints);
 
-            base.Start();
+            cam = new AngledLookAtSurfaceCamera(transform, surface.GetSurface(), curve);
+            cam.InitializeCamera();
         }
         
         [Serializable]

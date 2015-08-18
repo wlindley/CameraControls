@@ -16,7 +16,7 @@ namespace CamCon
             if (null == mover)
             {
                 var planeSurface = surface.GetSurface() as PlaneSurface;
-                mover = PlaneMover.GetInstance(cam, planeSurface, zoomSpeed, panSpeed);
+                mover = new PlaneMover(cam, planeSurface, zoomSpeed, panSpeed);
             }
             return mover;
         }

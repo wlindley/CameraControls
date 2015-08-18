@@ -9,6 +9,7 @@ namespace CamConTest
     public class AngledLookAtSurfaceCameraTest
     {
         private AngledLookAtSurfaceCamera testObj;
+        private Transform testTransform;
         private PlaneSurface surface;
         private Vector3 surfaceOrigin;
         private Vector3 surfaceNormal;
@@ -29,19 +30,16 @@ namespace CamConTest
             curvePoints[1] = new CurveControlPoint(10f, 90f);
             curve = new LerpCurve(curvePoints);
 
-            var testObjGO = new GameObject();
-            testObj = testObjGO.AddComponent<AngledLookAtSurfaceCamera>();
-            testObj.Surface = surface;
-            testObj.Curve = curve;
-
-            testObj.Start();
+            var testGO = new GameObject();
+            testTransform = testGO.transform;
+            testObj = new AngledLookAtSurfaceCamera(testTransform, surface, curve);
         }
 
         [TearDown]
         public void TearDown()
         {
-            GameObject.DestroyImmediate(testObj.gameObject);
-            testObj = null;
+            GameObject.DestroyImmediate(testTransform.gameObject);
+            testTransform = null;
         }
 
         [Test]
@@ -67,18 +65,18 @@ namespace CamConTest
             var lookTarget = surface.GetInitialPointOnSurface();
 
             AssertTestObjLookingAt(lookTarget);
-            TestUtil.AssertApproximatelyEqual(cameraDistance, (testObj.transform.position - lookTarget).magnitude);
+            TestUtil.AssertApproximatelyEqual(cameraDistance, (testTransform.position - lookTarget).magnitude);
 
             var offsetLength = cameraDistance * Mathf.Cos(cameraAngle);
             var cameraHeight = cameraDistance * Mathf.Sin(cameraAngle);
             var expectedCameraPosition = lookTarget + (surfaceNormal * cameraHeight) + (-surfaceUp * offsetLength);
-            TestUtil.AssertApproximatelyEqual(expectedCameraPosition, testObj.transform.position);
+            TestUtil.AssertApproximatelyEqual(expectedCameraPosition, testTransform.position);
         }
 
         private void AssertTestObjLookingAt(Vector3 position)
         {
-            var d = position - testObj.transform.position;
-            Assert.IsTrue(testObj.transform.forward == d.normalized);
+            var d = position - testTransform.position;
+            TestUtil.AssertApproximatelyEqual(testTransform.forward, d.normalized);
         }
     }
 }

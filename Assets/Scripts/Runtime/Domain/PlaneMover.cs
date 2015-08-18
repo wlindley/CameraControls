@@ -9,8 +9,6 @@ namespace CamCon
         private float zoomSpeed;
         private float panSpeed;
 
-        public PlaneMover() : this(null, null, 0f, 0f) { } //TODO: create NullCamera and NullSurface
-
         public PlaneMover(LookAtSurfaceCamera camera, PlaneSurface surface, float zoomSpeed, float panSpeed)
         {
             this.camera = camera;

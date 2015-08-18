@@ -17,6 +17,10 @@ namespace CamConTest
         private float zoomSpeed;
         private float panSpeed;
 
+        private float initialCameraDistance;
+        private Vector3 initialLookTarget;
+        private float timeDelta;
+
         [SetUp]
         public void SetUp()
         {
@@ -25,102 +29,66 @@ namespace CamConTest
             surfaceUp = Vector3.forward;
             surface = new PlaneSurface(surfaceOrigin, surfaceNormal, surfaceUp);
 
-            var cameraGO = new GameObject();
-            camera = cameraGO.AddComponent<LookAtSurfaceCamera>();
-            camera.Surface = surface;
-            camera.Start();
-            camera.SetDistanceToTarget(100f);
+            initialCameraDistance = 100f;
+            initialLookTarget = Vector3.zero;
+            timeDelta = .25f;
+            camera = Substitute.For<LookAtSurfaceCamera>();
+            camera.GetDistanceToTarget().Returns(initialCameraDistance);
+            camera.GetLookTarget().Returns(initialLookTarget);
 
             zoomSpeed = 5f;
             panSpeed = 10f;
             testObj = new PlaneMover(camera, surface, zoomSpeed, panSpeed);
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            GameObject.DestroyImmediate(camera.gameObject);
-            camera = null;
-        }
-
         [Test]
         public void MoveInDecreasesCameraDistanceBySpeedTimesTimeDelta()
         {
-            var initialDistance = camera.GetDistanceToTarget();
-            var timeDelta = .25f;
-
-            testObj.MoveIn(timeDelta);
-
-            var finalDistance = camera.GetDistanceToTarget();
             var expectedDelta = -zoomSpeed * timeDelta;
-            Assert.AreEqual(expectedDelta, finalDistance - initialDistance, float.Epsilon);
+            testObj.MoveIn(timeDelta);
+            camera.Received().SetDistanceToTarget(initialCameraDistance + expectedDelta);
         }
 
         [Test]
         public void MoveOutIncreasesCameraDistanceBySpeedTimesTimeDelta()
         {
-            var initialDistance = camera.GetDistanceToTarget();
-            var timeDelta = .25f;
-
-            testObj.MoveOut(timeDelta);
-
-            var finalDistance = camera.GetDistanceToTarget();
             var expectedDelta = zoomSpeed * timeDelta;
-            TestUtil.AssertApproximatelyEqual(expectedDelta, finalDistance - initialDistance);
+            testObj.MoveOut(timeDelta);
+            camera.Received().SetDistanceToTarget(initialCameraDistance + expectedDelta);
         }
 
         [Test]
         public void MoveUpMovesCamerasLookTargetAlongUpVectorBySpeedTimesTimeDelta()
         {
-            var initialTarget = camera.GetLookTarget();
-            var timeDelta = .25f;
-
+            var expectedDelta = surfaceUp * panSpeed * timeDelta;
             testObj.MoveUp(timeDelta);
-
-            var finalTarget = camera.GetLookTarget();
-            var expectedDelta = surfaceOrigin + (surfaceUp * panSpeed * timeDelta);
-            TestUtil.AssertApproximatelyEqual(expectedDelta, finalTarget - initialTarget);
+            camera.Received().TranslateLookTargetTo(initialLookTarget + expectedDelta);
         }
 
         [Test]
         public void MoveDownMovesCamerasLookTargetAlongUpVectorBySpeedTimesTimeDelta()
         {
-            var initialTarget = camera.GetLookTarget();
-            var timeDelta = .25f;
-
+            var expectedDelta = -surfaceUp * panSpeed * timeDelta;
             testObj.MoveDown(timeDelta);
-
-            var finalTarget = camera.GetLookTarget();
-            var expectedDelta = surfaceOrigin - (surfaceUp * panSpeed * timeDelta);
-            TestUtil.AssertApproximatelyEqual(expectedDelta, finalTarget - initialTarget);
+            camera.Received().TranslateLookTargetTo(initialLookTarget + expectedDelta);
         }
 
         [Test]
         public void MoveLeftMovesCamerasLookTargetAlongRightVectorBySpeedTimesTimeDelta()
         {
-            var initialTarget = camera.GetLookTarget();
-            var timeDelta = .25f;
-
-            testObj.MoveLeft(timeDelta);
-
-            var finalTarget = camera.GetLookTarget();
             var rightVector = Vector3.Cross(surfaceNormal, surfaceUp);
-            var expectedDelta = surfaceOrigin - (rightVector * panSpeed * timeDelta);
-            TestUtil.AssertApproximatelyEqual(expectedDelta, finalTarget - initialTarget);
+            var expectedDelta = -rightVector * panSpeed * timeDelta;
+            testObj.MoveLeft(timeDelta);
+            camera.Received().TranslateLookTargetTo(initialLookTarget + expectedDelta);
         }
 
         [Test]
         public void MoveRightMovesCamerasLookTargetAlongRightVectorBySpeedTimesTimeDelta()
         {
-            var initialTarget = camera.GetLookTarget();
-            var timeDelta = .25f;
-
-            testObj.MoveRight(timeDelta);
-
-            var finalTarget = camera.GetLookTarget();
             var rightVector = Vector3.Cross(surfaceNormal, surfaceUp);
-            var expectedDelta = surfaceOrigin + (rightVector * panSpeed * timeDelta);
-            TestUtil.AssertApproximatelyEqual(expectedDelta, finalTarget - initialTarget);
+            var expectedDelta = rightVector * panSpeed * timeDelta;
+            testObj.MoveRight(timeDelta);
+            camera.Received().TranslateLookTargetTo(initialLookTarget + expectedDelta);
         }
     }
 }

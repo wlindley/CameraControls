@@ -9,8 +9,6 @@ namespace CamCon
         private Vector3 up;
         private float sideLength;
 
-        public CubeSurface() : this(Vector3.zero, 1f, Vector3.up) { }
-
         public CubeSurface(Vector3 origin, float sideLength, Vector3 up)
         {
             this.origin = origin;

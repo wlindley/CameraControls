@@ -9,8 +9,6 @@ namespace CamCon
         private Vector3 up;
         private Vector3 normal;
 
-        public PlaneSurface() : this(Vector3.zero, Vector3.up, Vector3.forward) { }
-
         public PlaneSurface(Vector3 origin, Vector3 normal, Vector3 up)
         {
             this.origin = origin;

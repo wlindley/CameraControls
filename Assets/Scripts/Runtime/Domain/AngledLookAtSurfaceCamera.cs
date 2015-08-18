@@ -4,11 +4,16 @@ namespace CamCon
 {
     public class AngledLookAtSurfaceCamera : LookAtSurfaceCamera
     {
-        public LerpCurve Curve { get; set; }
+        private LerpCurve curve;
+
+        public AngledLookAtSurfaceCamera(Transform transform, Surface surface, LerpCurve curve) : base(transform, surface)
+        {
+            this.curve = curve;
+        }
 
         protected override void UpdateTransform()
         {
-            var cameraAngle = Curve.Probe(distanceToTarget) * Mathf.Deg2Rad;
+            var cameraAngle = curve.Probe(distanceToTarget) * Mathf.Deg2Rad;
             var offsetMagnitude = distanceToTarget * Mathf.Cos(cameraAngle);
             var heightFromSurface = distanceToTarget * Mathf.Sin(cameraAngle);
             var normal = Surface.GetNormalAtPoint(lookTarget);
