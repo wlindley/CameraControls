@@ -9,9 +9,7 @@ namespace CamCon
         {
             if (null != TestInstance)
                 return TestInstance;
-            else
-                TestInstance = new PlaneMover(camera, surface, zoomSpeed, panSpeed);
-            return TestInstance;
+            return new PlaneMover(camera, surface, zoomSpeed, panSpeed);
         }
 
         private LookAtSurfaceCamera camera;
