@@ -13,24 +13,9 @@ namespace CamCon
             surface = CubeSurface.GetInstance(transform.position, sideLength, transform.up);
         }
 
-        public override Vector3 GetInitialPointOnSurface()
+        internal override Surface GetSurface()
         {
-            return surface.GetInitialPointOnSurface();
-        }
-
-        public override Vector3 GetWorldUpVector()
-        {
-            return surface.GetWorldUpVector();
-        }
-
-        public override Vector3 GetNormalAtPoint(Vector3 position)
-        {
-            return surface.GetNormalAtPoint(position);
-        }
-
-        public override Vector3 ClampPointToSurface(Vector3 position)
-        {
-            return surface.ClampPointToSurface(position);
+            return surface;
         }
 
         private void OnDrawGizmosSelected()

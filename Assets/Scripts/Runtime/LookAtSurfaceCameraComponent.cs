@@ -8,7 +8,7 @@ namespace CamCon
 
         public override void Start()
         {
-            base.Surface = surface;
+            base.Surface = surface.GetSurface();
             base.Start();
         }
     }

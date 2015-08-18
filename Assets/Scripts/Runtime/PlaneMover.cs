@@ -4,10 +4,22 @@ namespace CamCon
 {
     public class PlaneMover : LookAtSurfaceCameraMover
     {
+        public static PlaneMover TestInstance { get; set; }
+        public static PlaneMover GetInstance(LookAtSurfaceCamera camera, PlaneSurface surface, float zoomSpeed, float panSpeed)
+        {
+            if (null != TestInstance)
+                return TestInstance;
+            else
+                TestInstance = new PlaneMover(camera, surface, zoomSpeed, panSpeed);
+            return TestInstance;
+        }
+
         private LookAtSurfaceCamera camera;
         private PlaneSurface surface;
         private float zoomSpeed;
         private float panSpeed;
+
+        public PlaneMover() : this(null, null, 0f, 0f) { } //TODO: create NullCamera and NullSurface
 
         public PlaneMover(LookAtSurfaceCamera camera, PlaneSurface surface, float zoomSpeed, float panSpeed)
         {
@@ -17,38 +29,38 @@ namespace CamCon
             this.panSpeed = panSpeed;
         }
 
-        public void MoveLeft(float dt)
+        virtual public void MoveLeft(float dt)
         {
             var lookTarget = camera.GetLookTarget();
             var left = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetWorldUpVector());
             MoveLookTargetBy(left * panSpeed * dt);
         }
 
-        public void MoveRight(float dt)
+        virtual public void MoveRight(float dt)
         {
             var lookTarget = camera.GetLookTarget();
             var left = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetWorldUpVector());
             MoveLookTargetBy(-left * panSpeed * dt);
         }
 
-        public void MoveUp(float dt)
+        virtual public void MoveUp(float dt)
         {
             var up = surface.GetWorldUpVector();
             MoveLookTargetBy(up * panSpeed * dt);
         }
 
-        public void MoveDown(float dt)
+        virtual public void MoveDown(float dt)
         {
             var up = surface.GetWorldUpVector();
             MoveLookTargetBy(-up * panSpeed * dt);
         }
 
-        public void MoveIn(float dt)
+        virtual public void MoveIn(float dt)
         {
             IncreaseDistanceBy(-zoomSpeed * dt);
         }
 
-        public void MoveOut(float dt)
+        virtual public void MoveOut(float dt)
         {
             IncreaseDistanceBy(zoomSpeed * dt);
         }

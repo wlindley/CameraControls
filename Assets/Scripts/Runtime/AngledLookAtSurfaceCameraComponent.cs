@@ -10,7 +10,7 @@ namespace CamCon
 
         public override void Start()
         {
-            base.Surface = surface;
+            base.Surface = surface.GetSurface();
 
             var curvePoints = new CurveControlPoint[controlPoints.Length];
             for (var i = 0; i < controlPoints.Length; i++)
