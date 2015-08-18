@@ -380,7 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff26bf97437b0b4eb53b56b17d9cbe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 723221754}
+  lookAtCamera: {fileID: 723221754}
   surface: {fileID: 425038663}
   zoomSpeed: 10
   panSpeed: 10

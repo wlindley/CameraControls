@@ -4,7 +4,7 @@ namespace CamCon
 {
     public class PlaneMoverComponent : MoverComponent
     {
-        public LookAtSurfaceCamera cam;
+        public CameraComponent lookAtCamera;
         public PlaneSurfaceComponent surface;
         public float zoomSpeed;
         public float panSpeed;
@@ -16,7 +16,7 @@ namespace CamCon
             if (null == mover)
             {
                 var planeSurface = surface.GetSurface() as PlaneSurface;
-                mover = new PlaneMover(cam, planeSurface, zoomSpeed, panSpeed);
+                mover = new PlaneMover(lookAtCamera.GetCamera(), planeSurface, zoomSpeed, panSpeed);
             }
             return mover;
         }
