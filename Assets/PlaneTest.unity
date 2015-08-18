@@ -201,7 +201,6 @@ GameObject:
   - 124: {fileID: 723221750}
   - 81: {fileID: 723221749}
   - 114: {fileID: 723221754}
-  - 114: {fileID: 723221755}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -286,21 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9d57bc9bb0629b42b7569c54f7ec134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surfaceObj: {fileID: 425038663}
---- !u!114 &723221755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 723221748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebc5bd4d39f10fc40a134431c5506288, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraSurface: {fileID: 425038663}
-  verticalSpeed: 5
-  horizontalSpeed: 50
+  surface: {fileID: 425038663}
 --- !u!1 &1180933792
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,3 +340,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 425038665}
   m_RootOrder: 0
+--- !u!1 &1354729258
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1354729261}
+  - 114: {fileID: 1354729260}
+  - 114: {fileID: 1354729259}
+  m_Layer: 0
+  m_Name: Mover
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1354729259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1354729258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebc5bd4d39f10fc40a134431c5506288, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mover: {fileID: 1354729260}
+--- !u!114 &1354729260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1354729258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ff26bf97437b0b4eb53b56b17d9cbe5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 723221754}
+  surface: {fileID: 425038663}
+  zoomSpeed: 10
+  panSpeed: 10
+--- !u!4 &1354729261
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1354729258}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.61281586, y: -12.0750885, z: 1.03030777}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
