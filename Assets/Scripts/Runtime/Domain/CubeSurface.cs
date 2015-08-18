@@ -5,14 +5,6 @@ namespace CamCon
 {
     public class CubeSurface : Surface
     {
-        public static CubeSurface TestInstance;
-        public static CubeSurface GetInstance(Vector3 origin, float sideLength, Vector3 up)
-        {
-            if (null != TestInstance)
-                return TestInstance;
-            return new CubeSurface(origin, sideLength, up);
-        }
-
         private Vector3 origin;
         private Vector3 up;
         private float sideLength;

@@ -5,14 +5,6 @@ namespace CamCon
 {
     public class SphereSurface : Surface
     {
-        public static SphereSurface TestInstance;
-        public static SphereSurface GetInstance(Vector3 origin, float radius, Vector3 up)
-        {
-            if (null != TestInstance)
-                return TestInstance;
-            return new SphereSurface(origin, radius, up);
-        }
-
         private Vector3 origin;
         private float radius;
         private Vector3 up;

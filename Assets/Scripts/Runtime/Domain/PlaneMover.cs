@@ -4,14 +4,6 @@ namespace CamCon
 {
     public class PlaneMover : LookAtSurfaceCameraMover
     {
-        public static PlaneMover TestInstance { get; set; }
-        public static PlaneMover GetInstance(LookAtSurfaceCamera camera, PlaneSurface surface, float zoomSpeed, float panSpeed)
-        {
-            if (null != TestInstance)
-                return TestInstance;
-            return new PlaneMover(camera, surface, zoomSpeed, panSpeed);
-        }
-
         private LookAtSurfaceCamera camera;
         private PlaneSurface surface;
         private float zoomSpeed;

@@ -5,14 +5,6 @@ namespace CamCon
 {
     public class PlaneSurface : Surface
     {
-        public static PlaneSurface TestInstance = null;
-        public static PlaneSurface GetInstance(Vector3 origin, Vector3 normal, Vector3 up)
-        {
-            if (null != TestInstance)
-                return TestInstance;
-            return new PlaneSurface(origin, normal, up);
-        }
-
         private Vector3 origin;
         private Vector3 up;
         private Vector3 normal;
