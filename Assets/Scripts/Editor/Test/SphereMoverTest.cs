@@ -30,7 +30,6 @@ namespace CamConTest
             surface = new SphereSurface(surfaceOrigin, surfaceRadius, surfaceUp);
 
             initialCameraDistance = 100f;
-            initialLookTarget = surface.GetInitialPointOnSurface();
             timeDelta = .25f;
 
             var go = new GameObject();
