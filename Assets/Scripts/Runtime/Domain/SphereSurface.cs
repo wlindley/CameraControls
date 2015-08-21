@@ -9,6 +9,22 @@ namespace CamCon
         private float radius;
         private Vector3 up;
 
+        public Vector3 Origin
+        {
+            get
+            {
+                return origin;
+            }
+        }
+
+        public float Radius
+        {
+            get
+            {
+                return radius;
+            }
+        }
+
         public SphereSurface(Vector3 origin, float radius, Vector3 up)
         {
             this.origin = origin;
@@ -18,7 +34,7 @@ namespace CamCon
 
         virtual public Vector3 GetInitialPointOnSurface()
         {
-            return origin + (radius * Vector3.forward);
+            return origin + (radius * Vector3.right);
         }
 
         virtual public Vector3 GetWorldUpVector()
