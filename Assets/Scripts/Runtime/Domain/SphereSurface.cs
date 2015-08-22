@@ -37,9 +37,12 @@ namespace CamCon
             return origin + (radius * Vector3.right);
         }
 
-        virtual public Vector3 GetWorldUpVector()
+        virtual public Vector3 GetUpVectorAtPoint(Vector3 position)
         {
-            return up;
+            var diff = (position - origin).normalized;
+            var left = Vector3.Cross(up, diff);
+            var localUp = Vector3.Cross(diff, left);
+            return localUp;
         }
 
         virtual public Vector3 GetNormalAtPoint(Vector3 position)

@@ -48,7 +48,7 @@ namespace CamConTest
             var worldUp = new Vector3(0, 0, 1);
             surface.GetInitialPointOnSurface().Returns(origin);
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
-            surface.GetWorldUpVector().Returns(worldUp);
+            surface.GetUpVectorAtPoint(Arg.Any<Vector3>()).Returns(worldUp);
 
             BuildTestObj();
 
@@ -82,7 +82,7 @@ namespace CamConTest
             var distance = 5f;
             surface.GetInitialPointOnSurface().Returns(origin);
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normalAtOrigin);
-            surface.GetWorldUpVector().Returns(worldUp);
+            surface.GetUpVectorAtPoint(Arg.Any<Vector3>()).Returns(worldUp);
 
             BuildTestObj();
             testObj.SetDistanceToTarget(distance);
@@ -103,7 +103,7 @@ namespace CamConTest
             var distance = 5f;
             surface.GetInitialPointOnSurface().Returns(origin);
             surface.GetNormalAtPoint(Arg.Any<Vector3>()).Returns(normal);
-            surface.GetWorldUpVector().Returns(worldUp);
+            surface.GetUpVectorAtPoint(Arg.Any<Vector3>()).Returns(worldUp);
 
             BuildTestObj();
             testObj.SetDistanceToTarget(distance);
@@ -127,7 +127,7 @@ namespace CamConTest
             surface.GetInitialPointOnSurface().Returns(origin);
             surface.GetNormalAtPoint(origin).Returns(normalAtOrigin);
             surface.GetNormalAtPoint(newTarget).Returns(normalAtNewTarget);
-            surface.GetWorldUpVector().Returns(worldUp);
+            surface.GetUpVectorAtPoint(Arg.Any<Vector3>()).Returns(worldUp);
 
             BuildTestObj();
             testObj.SetDistanceToTarget(distance);

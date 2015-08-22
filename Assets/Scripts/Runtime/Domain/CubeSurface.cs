@@ -21,7 +21,7 @@ namespace CamCon
             return origin + (.5f * sideLength * Vector3.forward);
         }
 
-        virtual public Vector3 GetWorldUpVector()
+        virtual public Vector3 GetUpVectorAtPoint(Vector3 position)
         {
             return up;
         }

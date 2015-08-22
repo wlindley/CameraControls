@@ -20,26 +20,26 @@ namespace CamCon
         virtual public void MoveLeft(float dt)
         {
             var lookTarget = camera.GetLookTarget();
-            var right = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetWorldUpVector());
+            var right = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetUpVectorAtPoint(lookTarget));
             MoveLookTargetBy(-right * panSpeed * dt);
         }
 
         virtual public void MoveRight(float dt)
         {
             var lookTarget = camera.GetLookTarget();
-            var right = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetWorldUpVector());
+            var right = Vector3.Cross(surface.GetNormalAtPoint(lookTarget), surface.GetUpVectorAtPoint(lookTarget));
             MoveLookTargetBy(right * panSpeed * dt);
         }
 
         virtual public void MoveUp(float dt)
         {
-            var up = surface.GetWorldUpVector();
+            var up = surface.GetUpVectorAtPoint(camera.GetLookTarget());
             MoveLookTargetBy(up * panSpeed * dt);
         }
 
         virtual public void MoveDown(float dt)
         {
-            var up = surface.GetWorldUpVector();
+            var up = surface.GetUpVectorAtPoint(camera.GetLookTarget());
             MoveLookTargetBy(-up * panSpeed * dt);
         }
 

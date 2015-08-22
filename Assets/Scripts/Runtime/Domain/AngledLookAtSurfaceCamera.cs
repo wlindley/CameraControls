@@ -17,7 +17,7 @@ namespace CamCon
             var offsetMagnitude = distanceToTarget * Mathf.Cos(cameraAngle);
             var heightFromSurface = distanceToTarget * Mathf.Sin(cameraAngle);
             var normal = Surface.GetNormalAtPoint(lookTarget);
-            var up = Surface.GetWorldUpVector();
+            var up = Surface.GetUpVectorAtPoint(lookTarget);
 
             transform.position = lookTarget + (heightFromSurface * normal) - (up * offsetMagnitude);
             PointCameraAtLookTarget();

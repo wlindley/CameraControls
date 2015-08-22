@@ -29,9 +29,13 @@ namespace CamConTest
         }
 
         [Test]
-        public void GetWorldUpVectorReturnsSpecifiedUpVector()
+        public void GetUpVectorAtPointReturnsSpecifiedUpVector(
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double x,
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double y,
+            [NUnit.Framework.Random(-10.0, 10.0, 3)] double z)
         {
-            TestUtil.AssertApproximatelyEqual(up, testObj.GetWorldUpVector());
+            var pos = new Vector3((float)x, (float)y, (float)z);
+            TestUtil.AssertApproximatelyEqual(up, testObj.GetUpVectorAtPoint(pos));
         }
 
         [Test]

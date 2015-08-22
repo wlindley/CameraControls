@@ -30,9 +30,16 @@ namespace CamConTest
         }
 
         [Test]
-        public void GetWorldUpVectorReturnsSpecifiedUpVector()
+        public void GetUpVectorAtPointReturnsSpecifiedUpVector(
+            [NUnit.Framework.Random(0.0, 2.0 * Mathf.PI, 2)] double theta,
+            [NUnit.Framework.Random(0.0, 2.0 * Mathf.PI, 2)] double row,
+            [NUnit.Framework.Values(5.0)] double radius)
         {
-            TestUtil.AssertApproximatelyEqual(up, testObj.GetWorldUpVector());
+            var pos = origin + (Quaternion.Euler((float)theta, 0f, (float)row) * new Vector3((float)radius, 0f, 0f));
+            var diff = (pos - origin).normalized;
+            var left = Vector3.Cross(up, diff);
+            var localUp = Vector3.Cross(diff, left);
+            TestUtil.AssertApproximatelyEqual(localUp, testObj.GetUpVectorAtPoint(pos));
         }
 
         [Test]

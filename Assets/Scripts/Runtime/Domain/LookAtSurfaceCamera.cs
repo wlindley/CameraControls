@@ -68,7 +68,7 @@ namespace CamCon
 
         protected void PointCameraAtLookTarget()
         {
-            transform.LookAt(lookTarget, Surface.GetWorldUpVector());
+            transform.LookAt(lookTarget, Surface.GetUpVectorAtPoint(lookTarget));
         }
     }
 }

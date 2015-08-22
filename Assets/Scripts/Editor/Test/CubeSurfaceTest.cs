@@ -29,9 +29,13 @@ namespace CamConTest
         }
 
         [Test]
-        public void GetWorldUpVectorReturnsSpecifiedUpVector()
+        public void GetUpVectorAtPointReturnsSpecifiedUpVector(
+            [NUnit.Framework.Values(-10.0, 10.0, -10.0)] double x,
+            [NUnit.Framework.Values(-10.0, 10.0, 10.0)] double y,
+            [NUnit.Framework.Values(0.0, 10.0, -3.0)] double z)
         {
-            Assert.AreEqual(up, testObj.GetWorldUpVector());
+            var pos = new Vector3((float)x, (float)y, (float)z);
+            Assert.AreEqual(up, testObj.GetUpVectorAtPoint(pos));
         }
 
         [Test]
